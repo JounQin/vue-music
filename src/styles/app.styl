@@ -1,0 +1,63 @@
+@require "iconfont"
+@require "transition"
+
+::-webkit-scrollbar
+  size 0
+  display none
+  background transparent
+
+:root, body, #app
+  height 100%
+
+body
+  font-hei()
+
+  &.bg
+    background-color $bg-color
+
+#app
+  relative()
+  max-width 1024px
+  margin 0 auto
+  overflow-x hidden
+  overflow-y auto
+  scroll-behavior smooth
+  display flex
+  flex-direction column
+
+a
+  &, &:active, &:hover, &:visited
+    color inherit
+    text-decoration none
+
+.icon-character
+  display inline-block
+  line-height 1
+  border-radius 5px
+  padding 4px
+  color $reverse-color
+  scaleSize(10)
+  margin-left -2px
+  margin-right -2px
+
+// 1px fallback
+.border
+  border1px()
+
+.border-t
+  border1px-t()
+
+.border-b
+  border1px-b()
+
+.border-tb
+  border1px-tb()
+
+.border-l
+  border1px-l()
+
+.border-r
+  border1px-r()
+
+.border-radius
+  borderRadius()
