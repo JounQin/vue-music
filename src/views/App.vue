@@ -23,19 +23,21 @@
               .media
                 .media-left {{ ~~currentTime | formatSeconds}}
                 .media-body.media-middle
-                  div(:class="$style.progress")
+                  div(:class="$style.progress", @click="changeTime")
+                    div(:style="{width: currentTime * 100 / musicDuration + '%'}")
                 .media-right {{ ~~musicDuration | formatSeconds}}
         .media-right.media-middle
           button.theme-bg(:class="[$style.playAction, {[$style.active]: playing}]", @click="togglePlay()")
     audio(:src="musicSrc", ref="audio",
-    @canplay="canPlay",
+    @canplay="togglePlay(true)",
     @durationchange="durationChange",
-    @timeupdate="timeUpdate")
+    @timeupdate="timeUpdate",
+    @ended="playEnded")
 </template>
 <script>
   import {mapGetters, mapActions} from 'vuex'
 
-  import {formatSeconds} from 'utils'
+  import {formatSeconds, toNum} from 'utils'
 
   import HiLoading from 'HiLoading'
   import HiProgress from 'HiProgress'
@@ -52,9 +54,11 @@
       this.initAudio(this.$refs.audio)
     },
     methods: {
-      ...mapActions(['initAudio', 'durationChange', 'timeUpdate', 'togglePlay']),
-      canPlay() {
-        this.togglePlay(true)
+      ...mapActions(['initAudio', 'durationChange', 'timeUpdate', 'togglePlay', 'playEnded']),
+      changeTime(e) {
+        const {target} = e
+        const offsetX = e.clientX - target.offsetLeft
+        this.timeUpdate(offsetX / toNum(getComputedStyle(target).width) * this.musicDuration)
       }
     },
     components: {
@@ -96,10 +100,27 @@
       size 70px
 
   .progress
+    relative()
     width 100%
     height 5px
     border-radius 5px
     background-color alpha($back-light-color, .5)
+
+    > div
+      absolute()
+      height 100%
+      border-top-left-radius 5px
+      border-bottom-left-radius 5px
+      background-color $theme-green-darker
+      pointer-events none
+
+      &:before
+        absolute(right)
+        content ''
+        height 100%
+        width 2px
+        transform translate3d(100%, 0, 0)
+        background-color $back-light-color
 
   .play-action
     relative()

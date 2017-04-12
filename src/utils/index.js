@@ -1,4 +1,5 @@
 export * from './dom'
 export * from './filter'
+export * from './number'
 export * from './store'
 export * from './string'

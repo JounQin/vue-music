@@ -9,6 +9,8 @@ import {throttle} from 'lodash'
 
 import(`styles/theme-${['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)]}.styl`)
 
+if (__PROD__) require('vconsole')
+
 const {documentElement: docEl} = document
 
 const resize = () => {

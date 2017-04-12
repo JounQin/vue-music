@@ -1,6 +1,6 @@
 {
   "name": "vue-ssr",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha-1",
   "private": true,
   "description": "try to learn using vue with server slide render deeply",
   "repository": "git@github.com:JounQin/vue-ssr.git",
@@ -71,6 +71,7 @@
     "stylus-loader": "^3.0.1",
     "sw-precache-webpack-plugin": "^0.9.1",
     "url-loader": "^0.5.8",
+    "vconsole": "^2.5.2",
     "vue-loader": "^11.3.4",
     "vue-ssr-webpack-plugin": "^2.1.0",
     "vue-style-loader": "^2.0.5",

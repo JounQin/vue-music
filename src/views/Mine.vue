@@ -2,7 +2,7 @@
   div(:class="$style.container")
     ol.list-unstyled
       li.media(v-for="({name, src, img}, index) of musicList",
-      :class="{'border-t': index}",
+      :class="{'border-t': index, [$style.active]: index === musicIndex}",
       @click="toggleMusic(index)")
         .media-left
           img.media-object(:src="img")
@@ -19,7 +19,7 @@
       return {}
     },
     computed: {
-      ...mapGetters(['musicList'])
+      ...mapGetters(['musicList', 'musicIndex'])
     },
     methods: {
       ...mapActions(['deleteMusic', 'toggleMusic'])
@@ -28,12 +28,13 @@
 </script>
 <style lang="stylus" module>
   .container
-    padding 0 10px
+    li
+      padding 0 10px
 
-    li:last-child
-      scaleSize($small-size)
-      color $remark-color
-      text-align center
+      &:last-child
+        scaleSize($small-size)
+        color $remark-color
+        text-align center
 
     :global
       .media
@@ -47,4 +48,7 @@
 
       .iconfont
         font-size 20px
+
+  .active
+    background-color $remark-color
 </style>
