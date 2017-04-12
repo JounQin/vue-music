@@ -19,7 +19,8 @@
     "lint": "npm run lint:es",
     "lint:fix": "npm run lint:es -- --fix",
     "lint:es": "eslint --ext .js,.vue --max-warnings 10 .",
-    "pm2": "cross-env NODE_ENV=production PORT=5000 DEBUG=hi:* pm2 start build/bin/start.js --name=vue-music"
+    "pm2": "cross-env NODE_ENV=production PORT=5000 DEBUG=hi:* pm2 start build/bin/start.js --name=vue-music",
+    "deploy":"bash build/bash/deploy.sh"
   },
   "dependencies": {
     "bootstrap-styl": "^5.0.8",
