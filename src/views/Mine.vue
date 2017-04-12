@@ -3,7 +3,7 @@
     ol.list-unstyled
       li.media(v-for="({name, src, img}, index) of musicList",
       :class="{'border-t': index, [$style.active]: index === musicIndex}",
-      @click="toggleMusic(index)")
+      @click="toggleMusic({index, play: true})")
         .media-left
           img.media-object(:src="img")
         .media-body.media-middle {{ index + 1 }}. {{ name }}

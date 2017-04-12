@@ -29,7 +29,6 @@
         .media-right.media-middle
           button.theme-bg(:class="[$style.playAction, {[$style.active]: playing}]", @click="togglePlay()")
     audio(:src="musicSrc", ref="audio",
-    @canplay="togglePlay(true)",
     @durationchange="durationChange",
     @timeupdate="timeUpdate",
     @ended="playEnded")
@@ -50,11 +49,14 @@
     computed: {
       ...mapGetters(['audio', 'playing', 'progress', 'musicSrc', 'musicName', 'musicImg', 'musicDuration', 'currentTime'])
     },
+    created() {
+      this.toggleMusic({index: 0})
+    },
     mounted() {
       this.initAudio(this.$refs.audio)
     },
     methods: {
-      ...mapActions(['initAudio', 'durationChange', 'timeUpdate', 'togglePlay', 'playEnded']),
+      ...mapActions(['initAudio', 'durationChange', 'timeUpdate', 'togglePlay', 'playEnded', 'toggleMusic']),
       changeTime(e) {
         const {target} = e
         const offsetX = e.clientX - target.offsetLeft

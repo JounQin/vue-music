@@ -1,9 +1,9 @@
 {
-  "name": "vue-ssr",
-  "version": "0.1.0-alpha-1",
+  "name": "vue-music",
+  "version": "0.1.0-alpha-2",
   "private": true,
-  "description": "try to learn using vue with server slide render deeply",
-  "repository": "git@github.com:JounQin/vue-ssr.git",
+  "description": "online music player built by vue",
+  "repository": "git@github.com:JounQin/vue-music.git",
   "author": "JounQin <admin@1stg.me>",
   "license": "MIT",
   "scripts": {
