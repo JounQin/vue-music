@@ -83,10 +83,13 @@ const actions = {
     isNaN(currentTime) || (state.audio.currentTime = currentTime)
     commit(TIME_UPDATE)
   },
-  playEnded({commit, state}) {
+  playEnded({dispatch, state}) {
     const musicLength = state.musicList.length
     const musicIndex = state.musicIndex + 1
-    commit(TOGGLE_MUSIC, musicIndex < musicLength ? musicIndex : 0)
+    dispatch('toggleMusic', {
+      index: musicIndex < musicLength ? musicIndex : 0,
+      play: true
+    })
   }
 }
 
