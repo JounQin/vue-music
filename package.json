@@ -1,6 +1,6 @@
 {
   "name": "vue-ssr",
-  "version": "alpha-0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "try to learn using vue with server slide render deeply",
   "repository": "git@github.com:JounQin/vue-ssr.git",
