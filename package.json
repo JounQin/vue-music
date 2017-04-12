@@ -1,6 +1,6 @@
 {
   "name": "vue-ssr",
-  "version": "0.0.1",
+  "version": "alpha-0.1",
   "private": true,
   "description": "try to learn using vue with server slide render deeply",
   "repository": "git@github.com:JounQin/vue-ssr.git",
@@ -19,7 +19,7 @@
     "lint": "npm run lint:es",
     "lint:fix": "npm run lint:es -- --fix",
     "lint:es": "eslint --ext .js,.vue --max-warnings 10 .",
-    "pm2": "cross-env NODE_ENV=production DEBUG=hi:* pm2 start build/bin/start.js --name=vue-ssr"
+    "pm2": "cross-env NODE_ENV=production PORT=5000 DEBUG=hi:* pm2 start build/bin/start.js --name=vue-music"
   },
   "dependencies": {
     "bootstrap-styl": "^5.0.8",

@@ -38,6 +38,9 @@ scaleSize(size = $small-size, baseSize = null, transform = null, origin = null)
   if (origin)
     transform-origin origin
 
+sqrt(x)
+  return math(x, 'sqrt')
+
 // 1px fallback
 borderLine(direction, borderColor = $border-color)
   return linear-gradient(to direction, transparent 50%, borderColor 50%)
@@ -147,3 +150,13 @@ retina($file, $ext = 'jpg')
 
   @media (min-resolution 2dppx)
     background-image url($file'@2x.'$ext)
+
+scrollSmooth($type = null)
+  if ($type)
+    overflow-y hidden
+    overflow-x auto
+  else
+    overflow-x hidden
+    overflow-y auto
+  scroll-behavior smooth  // @stylint ignore
+  -webkit-overflow-scrolling touch

@@ -1,12 +1,13 @@
 import 'styles/bootstrap'
 import 'styles/app'
-import 'styles/theme-purple.styl'
 
 import {app, router, store} from './app'
 
 import {on} from 'utils'
 
 import {throttle} from 'lodash'
+
+import(`styles/theme-${['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)]}.styl`)
 
 const {documentElement: docEl} = document
 
