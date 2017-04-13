@@ -11,9 +11,9 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      name: 'mine',
-      path: '/',
-      component: () => import('views/Mine')
+      name: 'songList',
+      path: '/:all(all)?',
+      component: () => import('views/SongList')
     }
   ]
 })

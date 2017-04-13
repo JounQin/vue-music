@@ -5,9 +5,12 @@
     .theme-bg(:class="$style.header")
       .text-center QQ音乐
         span 搜索
-    ul.list-unstyled.theme-bg(:class="$style.menus")
-      li 我的
-      li 发现
+    .theme-bg(:class="$style.menus")
+      ul.list-unstyled
+        router-link(v-for="(name, path, index) of {'': '新歌', all: '总'}",
+        tag="li", :to="'/' + path", :key="index", replace, exact) {{ name }}榜
+        li 发现
+      div(:class="$style.border", :style="{left: 100 / 3 * activeIndex + '%'}")
     .scroll(:class="$style.content")
       transition(name="slide-fade")
         keep-alive
@@ -46,8 +49,18 @@
     filters: {
       formatSeconds
     },
+    data() {
+      return {
+        activeIndex: 0
+      }
+    },
     computed: {
       ...mapGetters(['audio', 'playing', 'progress', 'musicSrc', 'musicName', 'musicImg', 'musicDuration', 'currentTime'])
+    },
+    watch: {
+      $route(route) {
+        this.activeIndex = +!!route.params.all
+      }
     },
     created() {
       this.toggleMusic({index: 0})
@@ -72,8 +85,8 @@
 <style lang="stylus" module>
   .header, .menus
     flex 1
-    padding 10px
     display flex
+    padding 10px
     align-items center
     justify-content center
 
@@ -85,12 +98,23 @@
       absolute(right)
 
   .menus
-    margin-bottom 0
+    relative()
 
-  .menus
-    > li
+    ul
+      display flex
+      width 100%
+      margin-bottom 0
+
+    li
       flex 1
       text-align center
+
+  .border
+    absolute(left, bottom)
+    width (100 / 3) %
+    height 1px
+    background-color $back-light-color
+    transition left .3s
 
   .footer
     flex 2

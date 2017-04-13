@@ -10,13 +10,16 @@ export default (context) => {
 
     router.onReady(() => {
       Promise.all(router.getMatchedComponents()
-        .map(component => component.preFetch && component.preFetch({axios, router, store})))
-        .then(() => {
+        .map(component => component.preFetch && component.preFetch({
+          axios,
+          router,
+          route: router.currentRoute,
+          store
+        }))).then(() => {
           __DEV__ && console.log(`data pre-fetch: ${Date.now() - start}ms`)
           context.state = store.state
           resolve(app)
-        })
-        .catch(reject)
+        }).catch(reject)
     })
   })
 }

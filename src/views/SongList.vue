@@ -6,7 +6,10 @@
       @click="toggleMusic({index, play: true})")
         .media-left
           img.media-object(:src="img")
-        .media-body.media-middle {{ index + 1 }}. {{ singer }} - {{ name }}
+        .media-body.media-middle {{ index + 1 }}.
+          span(v-html="' ' + singer")
+          |  -
+          span(v-html="' ' + name")
         .media-right.media-middle(@click.stop="deleteMusic(index)")
           span.iconfont.icon-delete
       li 没有更多歌曲了~
@@ -14,10 +17,22 @@
 <script>
   import {mapGetters, mapActions} from 'vuex'
 
+  const fetchMusicList = async ({axios, route, store}) => {
+    const {data} = await axios.get(`/${route.params.all ? 'all' : 'new'}-songs`)
+    store.dispatch('resetMusicList', data)
+  }
+
   export default {
-    async preFetch({axios, store}) {
-      const {data} = await axios.get('/new-songs')
-      store.dispatch('resetMusicList', data)
+    name: 'song-list',
+    preFetch: fetchMusicList,
+    watch: {
+      $route(route) {
+        fetchMusicList({
+          axios: this.$http,
+          route,
+          store: this.$store
+        })
+      }
     },
     computed: {
       ...mapGetters(['musicList', 'musicIndex'])

@@ -87,7 +87,8 @@ const mutations = {
       musicName: music.name,
       musicImg: music.img,
       musicIndex: index,
-      musicDuration: 0
+      musicDuration: 0,
+      playing: false
     })
   },
   [DURATION_CHANGE](state) {
