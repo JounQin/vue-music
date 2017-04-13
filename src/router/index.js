@@ -13,7 +13,7 @@ const router = new VueRouter({
     {
       name: 'mine',
       path: '/',
-      component: () => System.import('views/Mine')
+      component: () => import('views/Mine')
     }
   ]
 })

@@ -3,7 +3,10 @@
     [
       "env",
       {
-        "modules": false
+        "modules": false,
+        "targets": {
+          "node": 7.8
+        }
       }
     ],
     "stage-0"
