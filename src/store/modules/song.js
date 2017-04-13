@@ -46,10 +46,10 @@ const actions = {
   togglePlay({commit}, force) {
     commit(TOGGLE_PLAY, force)
   },
-  deleteMusic({commit}, index) {
+  deleteSong({commit}, index) {
     commit(DELETE_SONG, index)
   },
-  toggleMusic({commit}, {index, play}) {
+  toggleSong({commit}, {index, play}) {
     state.songIndex === index || commit(TOGGLE_SONG, index)
     play && setTimeout(() => commit(TOGGLE_PLAY, true), 0)
   },
@@ -61,10 +61,10 @@ const actions = {
     commit(TIME_UPDATE)
   },
   playEnded({dispatch, state}) {
-    const musicLength = state.songList.length
+    const songLength = state.songList.length
     const songIndex = state.songIndex + 1
-    dispatch('toggleMusic', {
-      index: songIndex < musicLength ? songIndex : 0,
+    dispatch('toggleSong', {
+      index: songIndex < songLength ? songIndex : 0,
       play: true
     })
   }

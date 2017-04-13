@@ -1,10 +1,10 @@
 <template lang="pug">
   div(:class="$style.container")
-    ol.list-unstyled
-      li.media(v-for="({id, albumId, songName, singerName}, index) of songList",
-      :class="{'border-t': index, [$style.active]: index === songIndex}",
+    transition-group.list-unstyled(tag="ol", name="bounceOutRight")
+      li.media.border-b(v-for="({id, albumId, songName, singerName}, index) of songList",
+      :class="{[$style.active]: index === songIndex}",
       :key="id",
-      @click="toggleMusic({index, play: true})")
+      @click="toggleSong({index, play: true})")
         .media-left
           img.media-object(:src="`http://imgcache.qq.com/music/photo/album_300/${albumId % 100}/300_albumpic_${albumId}_0.jpg`")
         .media-body.media-middle {{ index + 1 }}.
@@ -13,7 +13,7 @@
           span(v-html="' ' + songName")
         .media-right.media-middle(@click.stop="deleteSong(index)")
           span.iconfont.icon-delete
-      li 没有更多歌曲了~
+    div(:class="$style.noMore") 没有更多歌曲了~
 </template>
 <script>
   import {mapGetters, mapActions} from 'vuex'
@@ -35,7 +35,7 @@
       ...mapGetters(['songList', 'songIndex'])
     },
     methods: {
-      ...mapActions(['deleteSong', 'toggleMusic'])
+      ...mapActions(['deleteSong', 'toggleSong'])
     }
   }
 </script>
@@ -43,11 +43,6 @@
   .container
     li
       padding 0 10px
-
-      &:last-child
-        scaleSize($small-size)
-        color $remark-color
-        text-align center
 
     :global
       .media
@@ -65,4 +60,10 @@
   .active
     background-color $remark-color
     color $reverse-color
+
+  .no-more
+    scaleSize($small-size)
+    color $remark-color
+    text-align center
+    margin-bottom 10px
 </style>

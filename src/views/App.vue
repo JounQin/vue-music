@@ -67,13 +67,13 @@
       }
     },
     created() {
-      this.toggleMusic({index: 0})
+      this.toggleSong({index: 0})
     },
     mounted() {
       this.initAudio(this.$refs.audio)
     },
     methods: {
-      ...mapActions(['initAudio', 'durationChange', 'timeUpdate', 'togglePlay', 'playEnded', 'toggleMusic']),
+      ...mapActions(['initAudio', 'durationChange', 'timeUpdate', 'togglePlay', 'playEnded', 'toggleSong']),
       changeTime(e) {
         const {target} = e
         const offsetX = e.clientX - target.offsetLeft
