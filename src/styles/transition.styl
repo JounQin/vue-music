@@ -40,3 +40,13 @@
 .slide-fade-enter, .slide-fade-leave-active
   transform translateX(200%)
   opacity 0
+
+.rotating
+  animation rotating linear infinite 10s
+
+@keyframes rotating
+  from
+    transform rotate(0)
+
+  to
+    transform rotate(360deg)

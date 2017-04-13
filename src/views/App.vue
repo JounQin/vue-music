@@ -18,7 +18,7 @@
     .theme-bg(:class="$style.footer")
       .media
         .media-left
-          img.media-object.img-circle(:src="songImg")
+          img.media-object.img-circle(:src="songImg", :class="{rotating: playing}")
         .media-body
           .media-heading
             h5.text-center {{ songIndex + 1 }}.
