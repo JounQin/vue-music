@@ -1,44 +1,41 @@
 <template lang="pug">
   div(:class="$style.container")
     ol.list-unstyled
-      li.media(v-for="({name, singer, src, img}, index) of musicList",
-      :class="{'border-t': index, [$style.active]: index === musicIndex}",
+      li.media(v-for="({id, albumId, songName, singerName}, index) of songList",
+      :class="{'border-t': index, [$style.active]: index === songIndex}",
+      :key="id",
       @click="toggleMusic({index, play: true})")
         .media-left
-          img.media-object(:src="img")
+          img.media-object(:src="`http://imgcache.qq.com/music/photo/album_300/${albumId % 100}/300_albumpic_${albumId}_0.jpg`")
         .media-body.media-middle {{ index + 1 }}.
-          span(v-html="' ' + singer")
+          span(v-html="' ' + singerName")
           |  -
-          span(v-html="' ' + name")
-        .media-right.media-middle(@click.stop="deleteMusic(index)")
+          span(v-html="' ' + songName")
+        .media-right.media-middle(@click.stop="deleteSong(index)")
           span.iconfont.icon-delete
       li 没有更多歌曲了~
 </template>
 <script>
   import {mapGetters, mapActions} from 'vuex'
 
-  const fetchMusicList = async ({axios, route, store}) => {
-    const {data} = await axios.get(`/${route.params.all ? 'all' : 'new'}-songs`)
-    store.dispatch('resetMusicList', data)
-  }
+  const fetchSongList = async ({route, store}) => store.dispatch('resetSongList', +!!route.params.all)
 
   export default {
     name: 'song-list',
-    preFetch: fetchMusicList,
+    preFetch: fetchSongList,
     watch: {
       $route(route) {
-        fetchMusicList({
-          axios: this.$http,
+        fetchSongList({
           route,
           store: this.$store
         })
       }
     },
     computed: {
-      ...mapGetters(['musicList', 'musicIndex'])
+      ...mapGetters(['songList', 'songIndex'])
     },
     methods: {
-      ...mapActions(['deleteMusic', 'toggleMusic'])
+      ...mapActions(['deleteSong', 'toggleMusic'])
     }
   }
 </script>

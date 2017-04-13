@@ -18,20 +18,23 @@
     .theme-bg(:class="$style.footer")
       .media
         .media-left
-          img.media-object.img-circle(:src="musicImg")
+          img.media-object.img-circle(:src="songImg")
         .media-body
           .media-heading
-            h5.text-center {{ musicName || '暂无选择任何音乐' }}
+            h5.text-center {{ songIndex + 1 }}.
+              span(v-html="' ' + singerName")
+              |  -
+              span(v-html="' ' + songName")
             .media
               .media
                 .media-left {{ ~~currentTime | formatSeconds}}
                 .media-body.media-middle
                   div(:class="$style.progress", @click="changeTime")
-                    div(:style="{width: currentTime * 100 / musicDuration + '%'}")
-                .media-right {{ ~~musicDuration | formatSeconds}}
+                    div(:style="{width: currentTime * 100 / songDuration + '%'}")
+                .media-right {{ ~~songDuration | formatSeconds}}
         .media-right.media-middle
           button.theme-bg(:class="[$style.playAction, {[$style.active]: playing}]", @click="togglePlay()")
-    audio(:src="musicSrc", ref="audio",
+    audio(:src="songSrc", ref="audio",
     @durationchange="durationChange",
     @timeupdate="timeUpdate",
     @ended="playEnded")
@@ -55,7 +58,8 @@
       }
     },
     computed: {
-      ...mapGetters(['audio', 'playing', 'progress', 'musicSrc', 'musicName', 'musicImg', 'musicDuration', 'currentTime'])
+      ...mapGetters(['audio', 'playing', 'progress', 'singerName', 'songSrc',
+        'songName', 'songImg', 'songIndex', 'songDuration', 'currentTime'])
     },
     watch: {
       $route(route) {
@@ -73,7 +77,7 @@
       changeTime(e) {
         const {target} = e
         const offsetX = e.clientX - target.offsetLeft
-        this.timeUpdate(offsetX / toNum(getComputedStyle(target).width) * this.musicDuration)
+        this.timeUpdate(offsetX / toNum(getComputedStyle(target).width) * this.songDuration)
       }
     },
     components: {
