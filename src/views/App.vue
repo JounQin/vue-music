@@ -147,5 +147,6 @@
     color $reverse-color
 
   .content
+    relative()
     flex 20
 </style>
