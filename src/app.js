@@ -3,6 +3,8 @@ import Vue from 'vue'
 import router$ from 'router'
 import store$ from 'store'
 
+import 'plugins'
+
 import App from 'views/App'
 
 export const router = router$

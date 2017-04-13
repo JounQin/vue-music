@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import {app, router, store} from './app'
 
 export default (context) => {
@@ -7,7 +9,8 @@ export default (context) => {
     router.push(context.url)
 
     router.onReady(() => {
-      Promise.all(router.getMatchedComponents().map(component => component.preFetch && component.preFetch()))
+      Promise.all(router.getMatchedComponents()
+        .map(component => component.preFetch && component.preFetch({axios, router, store})))
         .then(() => {
           __DEV__ && console.log(`data pre-fetch: ${Date.now() - start}ms`)
           context.state = store.state

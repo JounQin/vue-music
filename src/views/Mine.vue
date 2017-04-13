@@ -1,12 +1,12 @@
 <template lang="pug">
   div(:class="$style.container")
     ol.list-unstyled
-      li.media(v-for="({name, src, img}, index) of musicList",
+      li.media(v-for="({name, singer, src, img}, index) of musicList",
       :class="{'border-t': index, [$style.active]: index === musicIndex}",
       @click="toggleMusic({index, play: true})")
         .media-left
           img.media-object(:src="img")
-        .media-body.media-middle {{ index + 1 }}. {{ name }}
+        .media-body.media-middle {{ index + 1 }}. {{ singer }} - {{ name }}
         .media-right.media-middle(@click.stop="deleteMusic(index)")
           span.iconfont.icon-delete
       li 没有更多歌曲了~
@@ -15,6 +15,10 @@
   import {mapGetters, mapActions} from 'vuex'
 
   export default {
+    async preFetch({axios, store}) {
+      const {data} = await axios.get('/new-songs')
+      store.dispatch('resetMusicList', data)
+    },
     computed: {
       ...mapGetters(['musicList', 'musicIndex'])
     },
@@ -48,4 +52,5 @@
 
   .active
     background-color $remark-color
+    color $reverse-color
 </style>

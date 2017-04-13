@@ -3,7 +3,7 @@ import BabiliPlugin from 'babili-webpack-plugin'
 import VueSSRPlugin from 'vue-ssr-webpack-plugin'
 import _debug from 'debug'
 
-import {globals, paths, pkg} from '../config'
+import config, {globals, paths, pkg} from '../config'
 
 import baseConfig from './base'
 
@@ -19,7 +19,7 @@ export default {
   ...baseConfig,
   target: 'node',
   devtool: false,
-  entry: paths.src('entry-server'),
+  entry: ['babel-polyfill', paths.src('entry-server')],
   output: {
     ...baseConfig.output,
     filename: 'server-bundle.js',
@@ -30,7 +30,9 @@ export default {
     new webpack.DefinePlugin({
       ...globals,
       'process.env.VUE_ENV': JSON.stringify(VUE_ENV),
-      __SERVER__: true
+      __SERVER__: true,
+      SERVER_PREFIX: JSON.stringify(config.publicPath),
+      INNER_SERVER: JSON.stringify(config.innerServer)
     }),
     new BabiliPlugin(),
     new VueSSRPlugin()

@@ -5,7 +5,8 @@
       {
         "modules": false,
         "targets": {
-          "node": 7.8
+          "node": 7.8,
+          "uglify": true
         }
       }
     ],
