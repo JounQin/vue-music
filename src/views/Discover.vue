@@ -5,8 +5,8 @@
         .input-group
           span.input-group-addon
             span.iconfont.icon-search
-          input.form-control(v-model="keyword", placeholder="搜索歌曲", @focus="active = true", @blur="active = false")
-          span.input-group-addon(v-if="active") 取消
+          input.form-control(v-model="keyword", placeholder="搜索歌曲", @focus="active = true")
+          span.input-group-addon(v-if="active", @click="cancelSearch") 取消
     div(v-if="searched",:class="$style.searched")
       ol.list-unstyled
         li.media.border-b(v-for="({id, albumId, albumImg, songName, singerName}, index) of songList",
@@ -47,18 +47,30 @@
       }
     },
     computed: {
-      ...mapGetters(['songList', 'songIndex'])
+      ...mapGetters(['showFooter', 'songList', 'songIndex'])
+    },
+    beforeRouteLeave(to, from, next) {
+      this.searched = false
+      this.toggleFooter(true)
+      next()
     },
     methods: {
-      ...mapActions(['restSongList', 'toggleSong', 'setSongSrc']),
+      ...mapActions(['restSongList', 'toggleSong', 'toggleFooter', 'setSongSrc']),
       async search(keyword) {
-        const key = keyword || this.keyword
+        const key = this.keyword = keyword || this.keyword
 
         if (!key) return
 
+        this.active = true
+        this.searched = true
+
         const {data} = await this.$http.get(`/search-keyword`, {params: {key}})
         this.restSongList(data)
-        this.searched = true
+        this.toggleFooter(false)
+      },
+      cancelSearch() {
+        this.searched = false
+        this.active = false
       },
       async getSongSrc(id, index) {
         const song = this.songList[index]
@@ -68,6 +80,7 @@
         }
 
         this.toggleSong({index, play: true})
+        this.toggleFooter(true)
       }
     }
   }

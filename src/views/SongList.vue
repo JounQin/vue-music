@@ -29,11 +29,15 @@
     name: 'song-list',
     beforeRouteEnter: checkSongLit,
     beforeRouteUpdate: checkSongLit,
+    beforeRouteLeave(to, from, next) {
+      this.togglePlay(false)
+      next()
+    },
     computed: {
       ...mapGetters(['songList', 'songIndex'])
     },
     methods: {
-      ...mapActions(['deleteSong', 'toggleSong'])
+      ...mapActions(['deleteSong', 'toggleSong', 'togglePlay'])
     }
   }
 </script>

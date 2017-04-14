@@ -9,7 +9,7 @@ const DELETE_SONG = 'DELETE_SONG'
 const TOGGLE_SONG = 'TOGGLE_SONG'
 const DURATION_CHANGE = 'DURATION_CHANGE'
 const TIME_UPDATE = 'TIME_UPDATE'
-const TOGGLE_SEARCH = 'TOGGLE_SEARCH'
+const TOGGLE_FOOTER = 'TOGGLE_FOOTER'
 const SET_SONG_SRC = 'SET_SONG_SRC'
 
 const state = {
@@ -24,7 +24,7 @@ const state = {
   songDuration: 0,
   songList: [],
   songs: [],
-  searched: false
+  showFooter: true
 }
 
 const getters = generateGetters(Object.keys(state))
@@ -54,10 +54,20 @@ const actions = {
   deleteSong({commit}, index) {
     commit(DELETE_SONG, index)
   },
-  toggleSong({commit}, {index, play}) {
-    state.songIndex === index || commit(TOGGLE_SONG, index)
-    play && setTimeout(() => commit(TOGGLE_PLAY, true), 0)
-  },
+  toggleSong: (function () {
+    let timeout
+    return function ({commit}, {index, play}) {
+      if (state.songIndex !== index) {
+        commit(TOGGLE_SONG, index)
+        commit(TOGGLE_PLAY, false)
+      }
+
+      if (play) {
+        clearTimeout(timeout)
+        timeout = setTimeout(() => commit(TOGGLE_PLAY, true), 0)
+      }
+    }
+  })(),
   durationChange({commit}) {
     commit(DURATION_CHANGE)
   },
@@ -73,11 +83,11 @@ const actions = {
       play: true
     })
   },
-  toggleSearch({commit}, payload) {
-    commit(TOGGLE_SEARCH, payload)
+  toggleFooter({commit}, payload) {
+    commit(TOGGLE_FOOTER, payload)
   },
-  setSongSrc({commit}, songSrc) {
-    commit(SET_SONG_SRC, songSrc)
+  setSongSrc({commit}, payload) {
+    commit(SET_SONG_SRC, payload)
   }
 }
 
@@ -90,7 +100,7 @@ const mutations = {
   },
   [TOGGLE_PLAY](state, force) {
     if (!state.songSrc) return
-    state.audio[(state.playing = force || !state.playing) ? 'play' : 'pause']()
+    state.audio[(state.playing = typeof force === 'boolean' ? force : !state.playing) ? 'play' : 'pause']()
   },
   [DELETE_SONG](state, index) {
     state.songList.splice(index, 1)
@@ -99,7 +109,7 @@ const mutations = {
     const song = state.songList[index]
     song && Object.assign(state, {
       currentTime: 0,
-      songSrc: song.wait ? null : `http://ws.stream.qqmusic.qq.com/${song.id}.m4a?fromtag=46`,
+      songSrc: song.songSrc || (song.wait ? null : `http://ws.stream.qqmusic.qq.com/${song.id}.m4a?fromtag=46`),
       singerName: song.singerName,
       songName: song.songName,
       // eslint-disable-next-line max-len
@@ -115,8 +125,8 @@ const mutations = {
   [TIME_UPDATE](state) {
     state.currentTime = state.audio.currentTime
   },
-  [TOGGLE_SEARCH](state, payload) {
-    state.searched = payload
+  [TOGGLE_FOOTER](state, payload) {
+    state.showFooter = payload
   },
   [SET_SONG_SRC](state, songSrc) {
     state.songSrc = songSrc

@@ -14,7 +14,7 @@
       transition(name="slide-fade")
         keep-alive
           router-view
-    .theme-bg(v-if="!searched || playing", :class="$style.footer")
+    .theme-bg(v-if="showFooter", :class="$style.footer")
       .media
         .media-left
           img.media-object.img-circle(:src="albumImg", :class="{rotating: playing}")
@@ -58,7 +58,7 @@
     },
     computed: {
       ...mapGetters(['audio', 'playing', 'progress', 'singerName', 'songSrc',
-        'songName', 'albumImg', 'songIndex', 'songDuration', 'currentTime', 'searched'])
+        'songName', 'albumImg', 'songIndex', 'songDuration', 'currentTime', 'showFooter'])
     },
     watch: {
       $route(route) {
