@@ -9,6 +9,8 @@ const DELETE_SONG = 'DELETE_SONG'
 const TOGGLE_SONG = 'TOGGLE_SONG'
 const DURATION_CHANGE = 'DURATION_CHANGE'
 const TIME_UPDATE = 'TIME_UPDATE'
+const TOGGLE_SEARCH = 'TOGGLE_SEARCH'
+const SET_SONG_SRC = 'SET_SONG_SRC'
 
 const state = {
   audio: null,
@@ -17,17 +19,18 @@ const state = {
   songSrc: null,
   singerName: null,
   songName: null,
-  songImg: null,
+  albumImg: null,
   songIndex: 0,
   songDuration: 0,
   songList: [],
-  songs: []
+  songs: [],
+  searched: false
 }
 
 const getters = generateGetters(Object.keys(state))
 
 const actions = {
-  async resetSongList({commit, state}, index) {
+  async checkSongLit({dispatch, state}, index) {
     const {songs} = state
 
     let cache = songs[index]
@@ -36,7 +39,10 @@ const actions = {
       cache = songs[index] = (await axios.get(`/${index ? 'all' : 'new'}-songs`)).data
     }
 
-    commit(RESET_SONG_LIST, cache)
+    dispatch('restSongList', cache)
+  },
+  restSongList({commit}, songList) {
+    commit(RESET_SONG_LIST, songList)
     commit(TOGGLE_SONG, 0)
   },
   initAudio({commit}, audio) {
@@ -66,6 +72,12 @@ const actions = {
       index: songIndex < songLength ? songIndex : 0,
       play: true
     })
+  },
+  toggleSearch({commit}, payload) {
+    commit(TOGGLE_SEARCH, payload)
+  },
+  setSongSrc({commit}, songSrc) {
+    commit(SET_SONG_SRC, songSrc)
   }
 }
 
@@ -87,10 +99,11 @@ const mutations = {
     const song = state.songList[index]
     song && Object.assign(state, {
       currentTime: 0,
-      songSrc: `http://ws.stream.qqmusic.qq.com/${song.id}.m4a?fromtag=46`,
+      songSrc: song.wait ? null : `http://ws.stream.qqmusic.qq.com/${song.id}.m4a?fromtag=46`,
       singerName: song.singerName,
       songName: song.songName,
-      songImg: `//imgcache.qq.com/music/photo/album_300/${song.albumId % 100}/300_albumpic_${song.albumId}_0.jpg`,
+      // eslint-disable-next-line max-len
+      albumImg: song.albumImg || `//imgcache.qq.com/music/photo/album_300/${song.albumId % 100}/300_albumpic_${song.albumId}_0.jpg`,
       songIndex: index,
       songDuration: 0,
       playing: false
@@ -101,6 +114,12 @@ const mutations = {
   },
   [TIME_UPDATE](state) {
     state.currentTime = state.audio.currentTime
+  },
+  [TOGGLE_SEARCH](state, payload) {
+    state.searched = payload
+  },
+  [SET_SONG_SRC](state, songSrc) {
+    state.songSrc = songSrc
   }
 }
 

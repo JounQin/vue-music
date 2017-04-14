@@ -2,23 +2,22 @@
   #app
     hi-loading(v-if="progress")
     hi-progress(:progress="progress")
-    .theme-bg(:class="$style.header")
+    .shadow-bottom.theme-bg(:class="$style.header")
       .text-center QQ音乐
-        span 搜索
+        router-link.iconfont.icon-search(tag="span", to="/discover")
     .theme-bg(:class="$style.menus")
       ul.list-unstyled
-        router-link(v-for="(name, path, index) of {'': '新歌', all: '总'}",
-        tag="li", :to="'/' + path", :key="index", replace, exact) {{ name }}榜
-        li 发现
+        router-link(v-for="(name, path, index) of {'': '新歌榜', all: '总榜', discover: '发现'}",
+        tag="li", :to="'/' + path", :key="index", replace, exact) {{ name }}
       div(:class="$style.border", :style="{left: 100 / 3 * activeIndex + '%'}")
     .scroll(:class="$style.content")
       transition(name="slide-fade")
         keep-alive
           router-view
-    .theme-bg(:class="$style.footer")
+    .theme-bg(v-if="!searched || playing", :class="$style.footer")
       .media
         .media-left
-          img.media-object.img-circle(:src="songImg", :class="{rotating: playing}")
+          img.media-object.img-circle(:src="albumImg", :class="{rotating: playing}")
         .media-body
           .media-heading
             h5.text-center {{ songIndex + 1 }}.
@@ -59,11 +58,11 @@
     },
     computed: {
       ...mapGetters(['audio', 'playing', 'progress', 'singerName', 'songSrc',
-        'songName', 'songImg', 'songIndex', 'songDuration', 'currentTime'])
+        'songName', 'albumImg', 'songIndex', 'songDuration', 'currentTime', 'searched'])
     },
     watch: {
       $route(route) {
-        this.activeIndex = +!!route.params.all
+        this.activeIndex = ['', 'all', 'discover'].indexOf(route.fullPath.match(/^\/(all|discover)?/)[1] || '')
       }
     },
     created() {

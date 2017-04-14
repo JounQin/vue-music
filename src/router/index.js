@@ -14,6 +14,10 @@ const router = new VueRouter({
       name: 'songList',
       path: '/:all(all)?',
       component: () => import('views/SongList')
+    }, {
+      name: 'discover',
+      path: '/discover',
+      component: () => import('views/Discover')
     }
   ]
 })
