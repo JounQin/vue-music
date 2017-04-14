@@ -22,7 +22,7 @@ class HTMLStream extends Transform {
         this.push(this.context.head)
       }
       // inline server-rendered CSS collected by vue-style-loader
-      if (this.styleMode && this.context.styles) {
+      if (!this.styleMode && this.context.styles) {
         this.push(this.context.styles)
       }
       this.push(this.neck)
@@ -33,12 +33,12 @@ class HTMLStream extends Transform {
 
   _flush (done) {
     this.emit('beforeEnd')
+    if (this.styleMode && this.context.styles) {
+      this.push(this.context.styles)
+    }
     // inline initial store state
     if (this.context.state) {
       this.push(renderState(this.context.state))
-    }
-    if (!this.styleMode && this.context.styles) {
-      this.push(this.context.styles)
     }
     this.push(this.tail)
     done()

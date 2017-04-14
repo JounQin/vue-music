@@ -54,7 +54,7 @@ app.use(async (ctx, next) => {
     template,
     context,
     outletPlaceholder: '<div id="app"></div>',
-    styleMode: !__DEV__
+    styleMode: __DEV__
   })
 
   res.setHeader('Content-Type', 'text/html')
