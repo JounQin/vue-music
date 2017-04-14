@@ -62,10 +62,10 @@
         if (!key) return
 
         this.active = true
-        this.searched = true
 
-        const {data} = await this.$http.get(`/search-keyword`, {params: {key}})
-        this.restSongList(data)
+        this.restSongList((await this.$http.get(`/search-keyword`, {params: {key}})).data)
+
+        this.searched = true
         this.toggleFooter(false)
       },
       cancelSearch() {
