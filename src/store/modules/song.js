@@ -33,7 +33,6 @@ const actions = {
     let cache = songs[index]
 
     if (!cache) {
-      console.log('no-cache')
       cache = songs[index] = (await axios.get(`/${index ? 'all' : 'new'}-songs`)).data
     }
 
@@ -91,7 +90,7 @@ const mutations = {
       songSrc: `http://ws.stream.qqmusic.qq.com/${song.id}.m4a?fromtag=46`,
       singerName: song.singerName,
       songName: song.songName,
-      songImg: `http://imgcache.qq.com/music/photo/album_300/${song.albumId % 100}/300_albumpic_${song.albumId}_0.jpg`,
+      songImg: `//imgcache.qq.com/music/photo/album_300/${song.albumId % 100}/300_albumpic_${song.albumId}_0.jpg`,
       songIndex: index,
       songDuration: 0,
       playing: false

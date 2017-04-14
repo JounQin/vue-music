@@ -6,7 +6,7 @@
       :key="id",
       @click="toggleSong({index, play: true})")
         .media-left
-          img.media-object(:src="`http://imgcache.qq.com/music/photo/album_300/${albumId % 100}/300_albumpic_${albumId}_0.jpg`")
+          img.media-object(:src="`//imgcache.qq.com/music/photo/album_300/${albumId % 100}/300_albumpic_${albumId}_0.jpg`")
         .media-body.media-middle {{ index + 1 }}.
           span(v-html="' ' + singerName")
           |  -
