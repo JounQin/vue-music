@@ -2,11 +2,8 @@ import vm from 'vm'
 import axios from 'axios'
 import encoding from 'encoding'
 import musicAPI from 'music-api'
-import qs from 'qs'
 
 const parseJsonp = data => vm.runInNewContext(`const JsonCallback = v => v; ${encoding.convert(data, 'utf8', 'gbk')}`)
-
-const parseUrl = url => qs.parse(url.split('?')[1])
 
 export default router => {
   router.get('/:type(all|new)-songs', async ctx => {
@@ -18,7 +15,7 @@ export default router => {
 
   router.get('/search-keyword', async ctx => {
     ctx.body = (await musicAPI.searchSong('netease', {
-      key: parseUrl(ctx.url).key
+      key: ctx.query.key
     })).songList.map(({id, name: songName, album: {coverBig: albumImg}, artists}) => ({
       id,
       albumImg,
@@ -30,7 +27,7 @@ export default router => {
 
   router.get('/get-song-src', async ctx => {
     ctx.body = (await musicAPI.getSong('netease', {
-      id: parseUrl(ctx.url).id
+      id: ctx.query.id
     })).url
   })
 }

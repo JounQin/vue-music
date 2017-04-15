@@ -1,6 +1,6 @@
 {
   "name": "vue-music",
-  "version": "0.1.0-beta-1",
+  "version": "0.1.0-beta-2",
   "private": true,
   "description": "online music player built by vue",
   "repository": "git@github.com:JounQin/vue-music.git",
@@ -36,7 +36,6 @@
     "lru-cache": "^4.0.2",
     "music-api": "^0.2.8",
     "nib": "^1.1.2",
-    "qs": "^6.4.0",
     "stylus-px2rem": "^1.0.11",
     "vue": "^2.2.6",
     "vue-router": "^2.4.0",
@@ -58,7 +57,7 @@
     "css-loader": "^0.28.0",
     "debug": "^2.6.3",
     "eslint": "^3.19.0",
-    "eslint-config-standard": "^10.2.0",
+    "eslint-config-standard": "^10.2.1",
     "eslint-plugin-babel": "^4.1.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-node": "^4.2.2",
@@ -82,7 +81,7 @@
     "vue-ssr-webpack-plugin": "^3.0.0",
     "vue-style-loader": "^3.0.0",
     "vue-template-compiler": "^2.2.6",
-    "webpack": "^2.3.3",
+    "webpack": "^2.4.1",
     "webpack-dev-middleware": "^1.10.1",
     "webpack-hot-middleware": "^2.18.0",
     "yargs": "^7.1.0"
