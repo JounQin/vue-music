@@ -1,12 +1,6 @@
-import 'styles/bootstrap'
-import 'styles/app'
-import(`styles/theme-${['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)]}.styl`)
-
-/* eslint-disable import/first */
 import {app, router, store} from './app'
 import {on} from 'utils'
 import {throttle} from 'lodash'
-/* eslint-enable import/first */
 
 window.__INITIAL_STATE__ && store.replaceState(window.__INITIAL_STATE__)
 

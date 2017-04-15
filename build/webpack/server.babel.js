@@ -4,8 +4,9 @@ import VueSSRPlugin from 'vue-ssr-webpack-plugin'
 import _debug from 'debug'
 
 import config, {globals, paths, pkg} from '../config'
+import {nodeModules, baseLoaders, generateLoaders} from './utils'
 
-import baseConfig from './base'
+import baseConfig, {STYLUS_LOADER} from './base'
 
 const {NODE_ENV} = globals
 
@@ -20,6 +21,16 @@ export default {
   target: 'node',
   devtool: false,
   entry: ['babel-polyfill', paths.src('entry-server')],
+  module: {
+    rules: [
+      ...baseConfig.module.rules,
+      {
+        test: /[/\\](app|bootstrap|theme-\w+)\.styl$/,
+        loader: generateLoaders(STYLUS_LOADER, baseLoaders, {vue: true}),
+        exclude: nodeModules
+      }
+    ]
+  },
   output: {
     ...baseConfig.output,
     filename: 'server-bundle.js',
