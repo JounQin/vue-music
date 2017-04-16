@@ -67,13 +67,15 @@
       }
     },
     created() {
+      this.toggleTheme(['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)])
       this.toggleSong({index: 0})
     },
     mounted() {
       this.initAudio(this.$refs.audio)
     },
     methods: {
-      ...mapActions(['initAudio', 'durationChange', 'timeUpdate', 'togglePlay', 'playEnded', 'toggleSong']),
+      ...mapActions(['toggleTheme', 'initAudio', 'durationChange',
+        'timeUpdate', 'togglePlay', 'playEnded', 'toggleSong']),
       changeTime(e) {
         const {target} = e
         const offsetX = e.clientX - target.offsetLeft

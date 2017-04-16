@@ -8,7 +8,7 @@ import {nodeModules, baseLoaders, generateLoaders} from './utils'
 
 import baseConfig, {STYLUS_LOADER} from './base'
 
-const {NODE_ENV} = globals
+const {__PROD__, NODE_ENV} = globals
 
 const VUE_ENV = process.env.VUE_ENV = 'server'
 
@@ -25,7 +25,11 @@ export default {
     rules: [
       ...baseConfig.module.rules,
       {
-        test: /[/\\](app|bootstrap|theme-\w+)\.styl$/,
+        test: /[/\\](app|bootstrap)\.styl$/,
+        loader: __PROD__ ? 'null-loader' : generateLoaders(STYLUS_LOADER, baseLoaders, {vue: true}),
+        exclude: nodeModules
+      }, {
+        test: /[/\\]theme-\w+\.styl$/,
         loader: generateLoaders(STYLUS_LOADER, baseLoaders, {vue: true}),
         exclude: nodeModules
       }

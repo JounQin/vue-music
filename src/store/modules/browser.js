@@ -1,5 +1,6 @@
 import {generateGetters} from 'utils'
 
+const TOGGLE_THEME = 'TOGGLE_THEME'
 const SET_SIZE = 'SET_SIZE'
 
 const state = {
@@ -13,13 +14,18 @@ const state = {
   fontSize: 16,
   logicWidth: 375,
   threshold: 768,
-  mode: true
+  mode: true,
+  theme: null
 }
 
 const getters = generateGetters(['baseWidth', 'baseFontSize', 'dpi', 'winHeight', 'winWidth',
-  'appWidth', 'rem', 'fontSize', 'logicWidth', 'threshold', 'mode'])
+  'appWidth', 'rem', 'fontSize', 'logicWidth', 'threshold', 'mode', 'theme'])
 
 const actions = {
+  toggleTheme({commit}, theme) {
+    commit(TOGGLE_THEME, theme)
+    import(`styles/theme-${theme}.styl`)
+  },
   setSize({commit}, {winHeight, winWidth}) {
     const size = {winHeight, winWidth}
     const baseWidth = state.baseWidth
@@ -35,6 +41,9 @@ const actions = {
 }
 
 const mutations = {
+  [TOGGLE_THEME](state, theme) {
+    state.theme = theme
+  },
   [SET_SIZE](state, size) {
     Object.assign(state, size)
   }

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import {app, router, store} from './app'
 
-export default (context) => {
+export default context => {
   const start = __DEV__ && Date.now()
 
   return new Promise((resolve, reject) => {
