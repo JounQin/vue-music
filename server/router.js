@@ -39,7 +39,4 @@ const router = new Router({prefix: '/api'})
     ctx.body = (await musicAPI.getSong('netease', {id: ctx.query.id})).url
   })
 
-export default app => {
-  app.use(router.routes())
-  app.use(router.allowedMethods())
-}
+export default app => app.use(router.routes()).use(router.allowedMethods())

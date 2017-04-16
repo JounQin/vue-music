@@ -18,8 +18,7 @@ const debug = _debug('hi:server')
 
 const app = new Koa()
 
-app.use(compress())
-app.use(logger())
+app.use(compress()).use(logger())
 
 router(app)
 
