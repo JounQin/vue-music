@@ -3,13 +3,12 @@ import fs from 'fs'
 import Koa from 'koa'
 import compress from 'koa-compress'
 import logger from 'koa-logger'
-import Router from 'koa-router'
 import lruCache from 'lru-cache'
 import HTMLStream from 'vue-ssr-html-stream'
 import _debug from 'debug'
 
+import router from './router'
 import intercept from './intercept'
-import route from './route'
 
 import config, {globals, paths} from '../build/config'
 
@@ -22,14 +21,7 @@ const app = new Koa()
 app.use(compress())
 app.use(logger())
 
-const router = new Router({
-  prefix: '/api'
-})
-
-route(router)
-
-app.use(router.routes())
-app.use(router.allowedMethods())
+router(app)
 
 let renderer
 let template
