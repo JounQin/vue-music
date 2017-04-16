@@ -58,7 +58,7 @@
       }
     },
     computed: {
-      ...mapGetters(['audio', 'playing', 'progress', 'singerName', 'songSrc',
+      ...mapGetters(['theme', 'audio', 'playing', 'progress', 'singerName', 'songSrc',
         'songName', 'albumImg', 'songIndex', 'songDuration', 'currentTime', 'showFooter'])
     },
     watch: {
@@ -67,7 +67,7 @@
       }
     },
     created() {
-      this.toggleTheme(['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)])
+      this.theme || this.toggleTheme(['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)])
       this.toggleSong({index: 0})
     },
     mounted() {
