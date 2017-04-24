@@ -8,9 +8,9 @@
         .media-left
           img.media-object(:src="albumImg || `//imgcache.qq.com/music/photo/album_300/${albumId % 100}/300_albumpic_${albumId}_0.jpg`")
         .media-body.media-middle {{ index + 1 }}.
-          span(v-text="' ' + singerName")
+          span(v-html="' ' + singerName")
           |  -
-          span(v-text="' ' + songName")
+          span(v-html="' ' + songName")
         .media-right.media-middle(@click.stop="deleteSong(index)")
           span.iconfont.icon-delete
     div(:class="$style.noMore") 没有更多歌曲了~
