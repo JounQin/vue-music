@@ -67,7 +67,7 @@
       }
     },
     created() {
-      __SERVER__ && this.toggleTheme(['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)])
+      __SERVER__ && this.toggleTheme(['blue', 'green', 'purple', 'red', '#f00'][~~(Math.random() * 5)])
       this.toggleSong({index: 0})
     },
     mounted() {

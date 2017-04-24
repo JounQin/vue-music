@@ -56,7 +56,7 @@ export default {
     rules: [
       ...commonCssLoaders({
         sourceMap,
-        exclude: 'styl'
+        exclude: ['styl', 'stylus']
       }),
       {
         test: /^(?!.*[/\\](app|bootstrap|theme-\w+)\.styl$).*\.styl$/,
@@ -67,6 +67,9 @@ export default {
         test: /\.styl$/,
         loader: generateLoaders(STYLUS_LOADER, baseLoaders),
         include: nodeModules
+      }, {
+        test: /\.stylus$/,
+        loader: generateLoaders(STYLUS_LOADER, baseLoaders, {style: false})
       },
       {
         test: /\.js$/,

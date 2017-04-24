@@ -22,9 +22,13 @@ const getters = generateGetters(['baseWidth', 'baseFontSize', 'dpi', 'winHeight'
   'appWidth', 'rem', 'fontSize', 'logicWidth', 'threshold', 'mode', 'theme'])
 
 const actions = {
-  toggleTheme({commit}, theme) {
+  async toggleTheme({commit}, theme) {
     commit(TOGGLE_THEME, theme)
-    import(`styles/theme-${theme}.styl`)
+    if (theme.startsWith('#')) {
+      (await import('plugins/theme')).default(theme)
+    } else {
+      import(`styles/theme-${theme}`)
+    }
   },
   setSize({commit}, {winHeight, winWidth}) {
     const size = {winHeight, winWidth}
