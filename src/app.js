@@ -10,7 +10,7 @@ import 'plugins'
 
 import App from 'views/App'
 
-module.hot && module.hot.accept()
+if (module.hot) module.hot.accept()
 
 // eslint-disable-next-line no-new
 export const app = new Vue({

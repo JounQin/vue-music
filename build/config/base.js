@@ -29,6 +29,7 @@ export const alias = {
 }
 
 export const vendors = [
+  'axios',
   'vue',
   'vue-router',
   'vuex'
