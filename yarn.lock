@@ -1787,9 +1787,9 @@ create-hmac@^1.1.0, create-hmac@^1.1.2:
     create-hash "^1.1.0"
     inherits "^2.0.1"
 
-cross-env@^4.0.0:
-  version "4.0.0"
-  resolved "http://registry.npm.taobao.org/cross-env/download/cross-env-4.0.0.tgz#16083862d08275a4628b0b243b121bedaa55dd80"
+cross-env@^5.0.0-beta.0:
+  version "5.0.0-beta.0"
+  resolved "http://registry.npm.taobao.org/cross-env/download/cross-env-5.0.0-beta.0.tgz#9ab98526d6b9a466e6016afd6cc59a9ff6eed9e6"
   dependencies:
     cross-spawn "^5.1.0"
     is-windows "^1.0.0"
@@ -5158,7 +5158,7 @@ pug-walk@^1.1.1:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/pug-walk/download/pug-walk-1.1.1.tgz#b9976240d213692e6993fbc13ae1205c54052efe"
 
-pug@^2.0.0-beta11:
+pug@^2.0.0-beta12:
   version "2.0.0-beta9"
   resolved "http://registry.npm.taobao.org/pug/download/pug-2.0.0-beta9.tgz#158ec6dbace5bb78f2b25e8825477d03ea6e14b0"
   dependencies:
@@ -6391,9 +6391,9 @@ vue-loader@^11.3.4:
     vue-style-loader "^2.0.0"
     vue-template-es2015-compiler "^1.2.2"
 
-vue-router@^2.5.1:
-  version "2.5.1"
-  resolved "http://registry.npm.taobao.org/vue-router/download/vue-router-2.5.1.tgz#da462ba1561a5f2346cc2773dc880877ae75ba54"
+vue-router@^2.5.2:
+  version "2.5.2"
+  resolved "http://registry.npm.taobao.org/vue-router/download/vue-router-2.5.2.tgz#870db3b63ead0aab4cd0bac63a7b81341c593f56"
 
 vue-server-renderer@^2.2.6:
   version "2.2.6"
@@ -6668,9 +6668,9 @@ yargs@^6.0.0:
     y18n "^3.2.1"
     yargs-parser "^4.2.0"
 
-yargs@^7.1.0:
-  version "7.1.0"
-  resolved "http://registry.npm.taobao.org/yargs/download/yargs-7.1.0.tgz#6ba318eb16961727f5d284f8ea003e8d6154d0c8"
+yargs@^8.0.0-candidate.0:
+  version "8.0.0-candidate.0"
+  resolved "http://registry.npm.taobao.org/yargs/download/yargs-8.0.0-candidate.0.tgz#bde92614c0913a45ed7dd63b77e7248fbdacc034"
   dependencies:
     camelcase "^3.0.0"
     cliui "^3.2.0"
