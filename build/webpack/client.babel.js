@@ -114,7 +114,8 @@ if (__DEV__) {
       cacheId: 'vue-ssr',
       filename: 'service-worker.js',
       dontCacheBustUrlsMatching: /./,
-      staticFileGlobsIgnorePatterns: [/index\.html$/, /\.map$/]
+      staticFileGlobsIgnorePatterns: [/index\.html$/, /\.map$/],
+      stripPrefix: paths.dist().replace(/\\/g,"/")
     })
   )
 }
