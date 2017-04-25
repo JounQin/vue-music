@@ -42,7 +42,7 @@
 <script>
   import {mapGetters, mapActions} from 'vuex'
 
-  import {formatSeconds, toNum} from 'utils'
+  import {formatSeconds, leftPad, toNum} from 'utils'
 
   import HiLoading from 'HiLoading'
   import HiProgress from 'HiProgress'
@@ -67,7 +67,8 @@
       }
     },
     created() {
-      __SERVER__ && this.toggleTheme(['blue', 'green', 'purple', 'red', '#f00'][~~(Math.random() * 5)])
+      __SERVER__ && this.toggleTheme(Math.random() < 0.5 ? ['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)]
+        : '#' + leftPad((~~(Math.random() * 0xffffff)).toString(16), 6, 0))
       this.toggleSong({index: 0})
     },
     mounted() {
