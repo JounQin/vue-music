@@ -4,7 +4,7 @@ import {throttle} from 'lodash'
 
 window.__INITIAL_STATE__ && store.replaceState(window.__INITIAL_STATE__)
 
-if (__PROD__) require('vconsole')
+if (__DEV__) require('vconsole')
 
 const {documentElement: docEl} = document
 

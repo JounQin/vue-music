@@ -30,6 +30,7 @@ export const alias = {
 
 export const vendors = [
   'axios',
+  'regenerator-runtime/runtime',
   'vue',
   'vue-router',
   'vuex'
