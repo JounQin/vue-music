@@ -36,7 +36,8 @@ const DEFAULT_HEADERS = {
 app.use(async (ctx, next) => {
   if (!renderer || !template) {
     ctx.status = 200
-    return ctx.body = 'waiting for compilation... refresh in a moment.'
+    ctx.body = 'waiting for compilation... refresh in a moment.'
+    return
   }
 
   if (intercept(ctx, {logger: __DEV__ && debug})) {
