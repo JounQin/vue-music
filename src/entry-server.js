@@ -8,18 +8,21 @@ export default context => {
   return new Promise((resolve, reject) => {
     router.push(context.url)
 
-    router.onReady(() => {
-      Promise.all(router.getMatchedComponents()
-        .map(component => component.preFetch && component.preFetch({
-          axios,
-          router,
-          route: router.currentRoute,
-          store
-        }))).then(() => {
-          __DEV__ && console.log(`data pre-fetch: ${Date.now() - start}ms`)
-          context.state = store.state
-          resolve(app)
-        }).catch(reject)
-    })
+    router.onReady(async () => {
+      try {
+        await Promise.all(router.getMatchedComponents()
+          .map(({asyncData}) => asyncData && asyncData({
+            axios,
+            route: router.currentRoute,
+            store
+          })))
+      } catch (e) {
+        return reject(e)
+      }
+
+      __DEV__ && console.log(`data pre-fetch: ${Date.now() - start}ms`)
+      context.state = store.state
+      resolve(app)
+    }, reject)
   })
 }

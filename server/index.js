@@ -1,6 +1,7 @@
 import fs from 'fs'
 
 import Koa from 'koa'
+import onerror from 'koa-onerror'
 import compress from 'koa-compress'
 import logger from 'koa-logger'
 import lruCache from 'lru-cache'
@@ -18,11 +19,14 @@ const debug = _debug('hi:server')
 
 const app = new Koa()
 
+onerror(app)
+
 app.use(compress()).use(logger())
 
 router(app)
 
 let renderer
+let readPromise
 let template
 
 const koaVersion = require('koa/package.json').version
@@ -34,11 +38,7 @@ const DEFAULT_HEADERS = {
 }
 
 app.use(async (ctx, next) => {
-  if (!renderer || !template) {
-    ctx.status = 200
-    ctx.body = 'waiting for compilation... refresh in a moment.'
-    return
-  }
+  await readPromise
 
   if (intercept(ctx, {logger: __DEV__ && debug})) {
     await next()
@@ -52,7 +52,7 @@ app.use(async (ctx, next) => {
   const context = {url: ctx.url}
 
   ctx.body = renderer.renderToStream(context)
-    .on('error', ctx.onerror)
+    .on('error', e => ctx.onerror(e))
     .pipe(new HTMLStream({
       template,
       context,
@@ -70,9 +70,9 @@ const createRenderer = bundle => require('vue-server-renderer').createBundleRend
 })
 
 if (__DEV__) {
-  require('./dev-tools').default(app, {
-    bundleUpdated: bundle => (renderer = createRenderer(bundle)),
-    templateUpdated: temp => (template = temp)
+  readPromise = require('./dev-tools').default(app, (bundle, temp) => {
+    renderer = createRenderer(bundle)
+    template = temp
   })
 } else {
   renderer = createRenderer(require(paths.dist('vue-ssr-bundle.json'), 'utf-8'))
