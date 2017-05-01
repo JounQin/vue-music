@@ -1,27 +1,29 @@
-import axios from 'axios'
+import {leftPad} from 'utils'
 
-import {app, router, store} from './app'
+import {createApp} from './app'
 
-export default context => {
+export default context => new Promise((resolve, reject) => {
   const start = __DEV__ && Date.now()
 
-  return new Promise((resolve, reject) => {
-    router.push(context.url)
+  const {app, router, store} = createApp(context)
 
-    router.onReady(async () => {
-      const matched = router.getMatchedComponents()
+  router.push(context.url)
 
-      if(!matched.length) return reject(new Error({status: 404}))
+  router.onReady(async () => {
+    await Promise.all(router.getMatchedComponents().map(({asyncData}) => asyncData && asyncData({
+      store,
+      route: router.currentRoute
+    })))
 
-      await Promise.all(matched.map(({asyncData}) => asyncData && asyncData({
-        axios,
-        route: router.currentRoute,
-        store
-      })))
+    __DEV__ && console.log(`data pre-fetch: ${Date.now() - start}ms`)
+    context.state = store.state
 
-      __DEV__ && console.log(`data pre-fetch: ${Date.now() - start}ms`)
-      context.state = store.state
-      resolve(app)
-    }, reject)
-  })
-}
+    await store.dispatch('toggleTheme', {
+      context,
+      theme: Math.random() < 0.5 ? ['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)]
+        : '#' + leftPad((~~(Math.random() * 0xffffff)).toString(16), 6, 0)
+    })
+
+    resolve(app)
+  }, reject)
+})

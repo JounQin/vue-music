@@ -54,6 +54,7 @@
     "babel-preset-stage-0": "^7.0.0-alpha.9",
     "babel-register": "^7.0.0-alpha.9",
     "babili-webpack-plugin": "^0.0.11",
+    "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.0.0-beta.0",
     "css-loader": "^0.28.0",
     "debug": "^2.6.6",
@@ -86,6 +87,7 @@
     "webpack": "^2.4.1",
     "webpack-dev-middleware": "^1.10.2",
     "webpack-hot-middleware": "^2.18.0",
+    "webpack-node-externals": "^1.5.4",
     "yargs": "^8.0.0"
   }
 }

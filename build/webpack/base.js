@@ -44,6 +44,7 @@ export default {
   resolveLoader: {
     modules: [PACKAGES, NODE_MODULES]
   },
+  entry: 'regenerator-runtime/runtime',
   output: {
     path: paths.dist(),
     publicPath: config.publicPath,
@@ -61,14 +62,15 @@ export default {
         test: /^(?!.*[/\\](app|bootstrap|theme-\w+)\.styl$).*\.styl$/,
         loader: generateLoaders(STYLUS_LOADER, cssModuleLoaders),
         exclude: nodeModules
+      }, {
+        test: /theme-\w+\.styl$/,
+        loader: generateLoaders(STYLUS_LOADER, baseLoaders, {style: false}),
+        exclude: nodeModules
       },
       {
         test: /\.styl$/,
         loader: generateLoaders(STYLUS_LOADER, baseLoaders),
         include: nodeModules
-      }, {
-        test: /\.stylus$/,
-        loader: generateLoaders(STYLUS_LOADER, baseLoaders, {style: false})
       },
       {
         test: /\.js$/,
