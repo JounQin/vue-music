@@ -17,6 +17,21 @@ on(window, 'resize', throttle(resize, 300))
 
 resize()
 
-router.onReady(() => app.$mount('#app'))
+router.onReady(() => {
+  router.beforeResolve(async (to, from, next) => {
+    const prevMatched = router.getMatchedComponents(from)
+    const matched = router.getMatchedComponents(to)
+
+    let diffed = false
+
+    const activated = matched.filter((comp, index) => diffed || (diffed = (prevMatched[index] !== comp)))
+
+    activated.length && await Promise.all(activated.map(({asyncData}) => asyncData && asyncData({store, route: to})))
+
+    next()
+  })
+
+  app.$mount('#app')
+})
 
 location.protocol === 'https:' && navigator.serviceWorker && navigator.serviceWorker.register('/service-worker.js')

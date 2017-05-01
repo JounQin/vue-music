@@ -9,16 +9,15 @@ export default context => {
     router.push(context.url)
 
     router.onReady(async () => {
-      try {
-        await Promise.all(router.getMatchedComponents()
-          .map(({asyncData}) => asyncData && asyncData({
-            axios,
-            route: router.currentRoute,
-            store
-          })))
-      } catch (e) {
-        return reject(e)
-      }
+      const matched = router.getMatchedComponents()
+
+      if(!matched.length) return reject(new Error({status: 404}))
+
+      await Promise.all(matched.map(({asyncData}) => asyncData && asyncData({
+        axios,
+        route: router.currentRoute,
+        store
+      })))
 
       __DEV__ && console.log(`data pre-fetch: ${Date.now() - start}ms`)
       context.state = store.state
