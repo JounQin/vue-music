@@ -67,8 +67,11 @@
       }
     },
     created() {
-      __SERVER__ && this.toggleTheme(Math.random() < 0.5 ? ['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)]
-        : '#' + leftPad((~~(Math.random() * 0xffffff)).toString(16), 6, 0))
+      __SERVER__ && this.toggleTheme({
+        context: this.$root.$options.ssrContext,
+        theme: Math.random() < 0.5 ? ['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)]
+          : '#' + leftPad((~~(Math.random() * 0xffffff)).toString(16), 6, 0)
+      })
       this.toggleSong({index: 0})
     },
     mounted() {

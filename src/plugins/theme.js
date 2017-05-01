@@ -1,5 +1,3 @@
-import template from 'styles/theme-custom.stylus'
-
 import {leftPad} from 'utils'
 
 function darkenColor(col, amt) {
@@ -30,12 +28,22 @@ function darkenColor(col, amt) {
   return (usePound ? '#' : '') + leftPad((g | (b << 8) | (r << 16)).toString(16), 6, 0)
 }
 
-export default color => {
-  const darkerColor = darkenColor(color, 10)
-  const result = template.toString().replace(/\$theme-color(-darker)?/g, (match, $0) => $0 ? darkerColor : color)
+export default async (color, context) => {
+  const isCustom = color.startsWith('#')
+
+  const text = (await import(`styles/theme-${isCustom ? 'custom' : color}`)).toString()
+
+  let result
+
+  if (isCustom) {
+    const darkerColor = darkenColor(color, 10)
+    result = text.replace(/\$theme-color(-darker)?/g, (match, $0) => $0 ? darkerColor : color)
+  } else {
+    result = text
+  }
 
   if (__SERVER__) {
-    __VUE_SSR_CONTEXT__._styles[color] = {
+    (context._styles || (context._styles = {}))[color] = {
       ids: [color],
       css: result
     }

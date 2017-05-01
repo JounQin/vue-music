@@ -18,17 +18,11 @@
 <script>
   import {mapGetters, mapActions} from 'vuex'
 
-  import store from 'store'
-
-  const checkSongLit = async (to, from, next) => {
-    await store.dispatch('checkSongLit', +!!to.params.all)
-    next()
-  }
-
   export default {
     name: 'song-list',
-    beforeRouteEnter: checkSongLit,
-    beforeRouteUpdate: checkSongLit,
+    async asyncData({store, route}) {
+      await store.dispatch('checkSongLit', +!!route.params.all)
+    },
     beforeRouteLeave(to, from, next) {
       this.togglePlay(false)
       next()

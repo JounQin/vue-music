@@ -1,10 +1,13 @@
-import {app, router, store} from './app'
-import {on} from 'utils'
 import {throttle} from 'lodash'
+
+import {createApp} from './app'
+import {on} from 'utils'
+
+const {app, router, store} = createApp()
 
 window.__INITIAL_STATE__ && store.replaceState(window.__INITIAL_STATE__)
 
-if (__DEV__) require('vconsole')
+if (__PROD__) require('vconsole')
 
 const {documentElement: docEl} = document
 
@@ -33,5 +36,7 @@ router.onReady(() => {
 
   app.$mount('#app')
 })
+
+if (module.hot) module.hot.accept()
 
 location.protocol === 'https:' && navigator.serviceWorker && navigator.serviceWorker.register('/service-worker.js')

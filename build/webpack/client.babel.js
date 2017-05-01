@@ -1,11 +1,11 @@
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin'
-import pug from 'pug'
+import VueSSRClientPlugin from 'vue-server-renderer/client-plugin'
 import _debug from 'debug'
 
-import config, {globals, paths, pkg, vendors} from '../config'
+import config, {globals, paths} from '../config'
 import {nodeModules, baseLoaders, generateLoaders} from './utils'
 
 import baseConfig, {STYLUS_LOADER, prodEmpty} from './base'
@@ -27,10 +27,7 @@ let appLoader, bootstrapLoader
 const clientConfig = {
   ...baseConfig,
   target: 'web',
-  entry: {
-    app: ['regenerator-runtime/runtime', paths.src('entry-client')],
-    vendors
-  },
+  entry: [baseConfig.entry, paths.src('entry-client')],
   module: {
     rules: [
       ...baseConfig.module.rules,
@@ -46,10 +43,6 @@ const clientConfig = {
           extract: minimize && (bootstrapLoader = new ExtractTextPlugin(`${prodEmpty('bootstrap.')}[contenthash].css`))
         }),
         exclude: nodeModules
-      }, {
-        test: /[/\\]theme-\w+\.styl$/,
-        loader: generateLoaders(STYLUS_LOADER, baseLoaders),
-        exclude: nodeModules
       }
     ]
   },
@@ -61,21 +54,27 @@ const clientConfig = {
       SERVER_PREFIX: JSON.stringify(config.publicPath),
       INNER_SERVER: JSON.stringify(config.innerServer)
     }),
-    new webpack.optimize.CommonsChunkPlugin('vendors'),
-    new HtmlWebpackPlugin({
-      templateContent: pug.renderFile(paths.src('index.pug'), {
-        pretty: !minimize,
-        title: `${pkg.name} - ${pkg.description}`,
-        polyfill: !__DEV__
-      }),
-      favicon: paths.src('static/favicon.ico'),
-      hash: false,
-      inject: true,
-      minify: {
-        collapseWhitespace: minimize,
-        minifyJS: minimize
+    new CopyWebpackPlugin([{
+      from: paths.src('static'),
+      to: paths.dist()
+    }]),
+    // extract vendor chunks for better caching
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module) {
+        // a module is extracted into the vendor chunk if...
+        return (
+          // it's inside node_modules
+          /node_modules/.test(module.context) &&
+          // and not a CSS file (due to extract-text-webpack-plugin limitation)
+          !/\.css$/.test(module.request)
+        )
       }
-    })
+    }),
+    // extract webpack runtime & manifest to avoid vendor chunk hash changing
+    // on every build.
+    new webpack.optimize.CommonsChunkPlugin('manifest'),
+    new VueSSRClientPlugin()
   ]
 }
 
@@ -114,8 +113,7 @@ if (__DEV__) {
       cacheId: 'vue-ssr',
       filename: 'service-worker.js',
       dontCacheBustUrlsMatching: /./,
-      staticFileGlobsIgnorePatterns: [/index\.html$/, /\.map$/],
-      stripPrefix: paths.dist().replace(/\\/g, '/')
+      staticFileGlobsIgnorePatterns: [/index\.html$/, /\.map$/]
     })
   )
 }

@@ -1,11 +1,9 @@
-import fs from 'fs'
-
 import Koa from 'koa'
-import onerror from 'koa-onerror'
 import compress from 'koa-compress'
+import onerror from 'koa-onerror'
 import logger from 'koa-logger'
 import lruCache from 'lru-cache'
-import HTMLStream from 'vue-ssr-html-stream'
+import pug from 'pug'
 import _debug from 'debug'
 
 import router from './router'
@@ -17,6 +15,11 @@ const {__DEV__} = globals
 
 const debug = _debug('hi:server')
 
+const template = pug.renderFile(paths.src('index.pug'), {
+  pretty: !config.minimize,
+  polyfill: !__DEV__
+})
+
 const app = new Koa()
 
 onerror(app)
@@ -26,8 +29,7 @@ app.use(compress()).use(logger())
 router(app)
 
 let renderer
-let readPromise
-let template
+let readyPromise
 
 const koaVersion = require('koa/package.json').version
 const vueVersion = require('vue-server-renderer/package.json').version
@@ -38,7 +40,7 @@ const DEFAULT_HEADERS = {
 }
 
 app.use(async (ctx, next) => {
-  await readPromise
+  __DEV__ && await readyPromise
 
   if (intercept(ctx, {logger: __DEV__ && debug})) {
     await next()
@@ -49,34 +51,34 @@ app.use(async (ctx, next) => {
 
   const start = Date.now()
 
-  const context = {url: ctx.url}
+  const context = {url: ctx.url, title: 'Vue Music'}
 
   ctx.body = renderer.renderToStream(context)
     .on('error', e => ctx.onerror(e))
-    .pipe(new HTMLStream({
-      template,
-      context,
-      outletPlaceholder: '<div id="app"></div>'
-    }))
     .on('end', () => console.log(`whole request: ${Date.now() - start}ms`))
 })
 
 // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
-const createRenderer = bundle => require('vue-server-renderer').createBundleRenderer(bundle, {
+const createRenderer = (bundle, options) => require('vue-server-renderer').createBundleRenderer(bundle, {
+  ...options,
+  template,
+  inject: false,
   cache: lruCache({
     max: 1000,
     maxAge: 1000 * 60 * 15
-  })
+  }),
+  basedir: paths.dist(),
+  runInNewContext: false
 })
 
 if (__DEV__) {
-  readPromise = require('./dev-tools').default(app, (bundle, temp) => {
-    renderer = createRenderer(bundle)
-    template = temp
+  readyPromise = require('./dev-tools').default(app, (bundle, options) => {
+    renderer = createRenderer(bundle, options)
   })
 } else {
-  renderer = createRenderer(require(paths.dist('vue-ssr-bundle.json'), 'utf-8'))
-  template = fs.readFileSync(paths.dist('index.html'), 'utf-8')
+  renderer = createRenderer(require(paths.dist('vue-ssr-server-bundle.json')), {
+    clientManifest: require(paths.dist('vue-ssr-client-manifest.json'))
+  })
   app.use(require('koa-static')('dist'))
 }
 
