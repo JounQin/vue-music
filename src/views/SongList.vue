@@ -23,6 +23,10 @@
     async asyncData({store, route}) {
       await store.dispatch('checkSongLit', +!!route.params.all)
     },
+    async beforeRouteUpdate(to, from, next) {
+      await this.$options.asyncData({store: this.$store, route: to})
+      next()
+    },
     beforeRouteLeave(to, from, next) {
       this.togglePlay(false)
       next()

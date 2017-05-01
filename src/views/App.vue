@@ -42,7 +42,7 @@
 <script>
   import {mapGetters, mapActions} from 'vuex'
 
-  import {formatSeconds, leftPad, toNum} from 'utils'
+  import {formatSeconds, toNum} from 'utils'
 
   import HiLoading from 'HiLoading'
   import HiProgress from 'HiProgress'
@@ -52,26 +52,14 @@
     filters: {
       formatSeconds
     },
-    data() {
-      return {
-        activeIndex: 0
-      }
-    },
     computed: {
       ...mapGetters(['audio', 'playing', 'progress', 'singerName', 'songSrc',
-        'songName', 'albumImg', 'songIndex', 'songDuration', 'currentTime', 'showFooter'])
-    },
-    watch: {
-      $route(route) {
-        this.activeIndex = ['', 'all', 'discover'].indexOf(route.fullPath.match(/^\/(all|discover)?/)[1] || '')
+        'songName', 'albumImg', 'songIndex', 'songDuration', 'currentTime', 'showFooter']),
+      activeIndex() {
+        return ['', 'all', 'discover'].indexOf(this.$route.fullPath.match(/^\/(all|discover)?/)[1] || '')
       }
     },
     created() {
-      __SERVER__ && this.toggleTheme({
-        context: this.$root.$options.ssrContext,
-        theme: Math.random() < 0.5 ? ['blue', 'green', 'purple', 'red'][~~(Math.random() * 4)]
-          : '#' + leftPad((~~(Math.random() * 0xffffff)).toString(16), 6, 0)
-      })
       this.toggleSong({index: 0})
     },
     mounted() {
