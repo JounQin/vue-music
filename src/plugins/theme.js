@@ -28,7 +28,11 @@ function darkenColor(col, amt) {
   return (usePound ? '#' : '') + leftPad((g | (b << 8) | (r << 16)).toString(16), 6, 0)
 }
 
-export default async (color, context) => {
+const cache = {}
+
+const getStyle = async color => {
+  if (cache[color]) return cache[color]
+
   const isCustom = color.startsWith('#')
 
   const text = (await import(`styles/theme-${isCustom ? 'custom' : color}`)).toString()
@@ -42,9 +46,15 @@ export default async (color, context) => {
     result = text
   }
 
+  return (cache[color] = result)
+}
+
+export default async ({context, theme}) => {
+  const result = await getStyle(theme)
+
   if (__SERVER__) {
-    (context._styles || (context._styles = {}))[color] = {
-      ids: [color],
+    (context._styles || (context._styles = {}))[theme] = {
+      ids: [theme],
       css: result
     }
     return
