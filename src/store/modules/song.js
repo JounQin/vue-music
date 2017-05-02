@@ -32,6 +32,9 @@ export default () => {
   const getters = generateGetters(Object.keys(state))
 
   const actions = {
+    cacheSongList({state}, index) {
+      songs[index] = state.songList
+    },
     async checkSongLit({dispatch}, index) {
       dispatch('restSongList', songs[index] ||
         (songs[index] = (await axios.get(`/${index ? 'all' : 'new'}-songs`)).data))

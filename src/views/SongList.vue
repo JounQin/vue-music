@@ -31,6 +31,9 @@
       this.togglePlay(false)
       next()
     },
+    beforeMount() {
+      this.$store.dispatch('cacheSongList', +!!this.$route.params.all)
+    },
     computed: {
       ...mapGetters(['songList', 'songIndex'])
     },
