@@ -106,7 +106,7 @@ export default {
       stylus: {
         default: {
           import: paths.src('styles/_variables.styl'),
-          paths: 'node_modules/bootstrap-styl'
+          paths: paths.base('node_modules/bootstrap-styl')
         }
       }
     }),
