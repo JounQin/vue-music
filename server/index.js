@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import Koa from 'koa'
 import compress from 'koa-compress'
 import onerror from 'koa-onerror'
@@ -11,7 +13,7 @@ import intercept from './intercept'
 
 import config, {globals, paths} from '../build/config'
 
-const {__DEV__} = globals
+const {__DEV__, __PROD__} = globals
 
 const debug = _debug('hi:server')
 
@@ -39,19 +41,35 @@ const DEFAULT_HEADERS = {
   Server: `koa/${koaVersion}; vue-server-renderer/${vueVersion}`
 }
 
+const STATICS = {
+  '/': 'new',
+  '/all': 'all'
+}
+
 app.use(async (ctx, next) => {
-  __DEV__ && await readyPromise
+  await readyPromise
 
   if (intercept(ctx, {logger: __DEV__ && debug})) {
     await next()
     return
   }
 
+  const {url} = ctx
+
+  if (__PROD__) {
+    const html = STATICS[url.split('?')[0]] + '.html'
+    if (html && fs.existsSync(paths.dist(html))) {
+      ctx.url = html
+      await next()
+      return
+    }
+  }
+
   ctx.set(DEFAULT_HEADERS)
 
   const start = Date.now()
 
-  const context = {url: ctx.url, title: 'Vue Music'}
+  const context = {url, title: 'Vue Music'}
 
   ctx.body = renderer.renderToStream(context)
     .on('error', e => ctx.onerror(e))
