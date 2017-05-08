@@ -59,7 +59,7 @@ app.use(async (ctx, next) => {
   if (__PROD__) {
     const html = STATICS[url.split('?')[0]] + '.html'
     if (html && fs.existsSync(paths.dist(html))) {
-      ctx.url = html
+      ctx.url = '/' + html
       await next()
       return
     }
