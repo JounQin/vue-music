@@ -1,6 +1,6 @@
 import {leftPad} from 'utils'
 
-import {createApp} from './app'
+import createApp from './app'
 
 export default context => new Promise((resolve, reject) => {
   const start = __DEV__ && Date.now()
