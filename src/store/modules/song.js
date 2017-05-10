@@ -11,9 +11,15 @@ const DURATION_CHANGE = 'DURATION_CHANGE'
 const TIME_UPDATE = 'TIME_UPDATE'
 const TOGGLE_FOOTER = 'TOGGLE_FOOTER'
 const SET_SONG_SRC = 'SET_SONG_SRC'
+const KEY_WORDS = ['歌手', '张杰', '赵雷', '李健', '林志炫', '张碧晨', '梁博',
+  '周笔畅', '张靓颖', '陈奕迅', '周杰伦', '王力宏', 'TFBoys', '李玉刚', '魏晨', '薛之谦']
 
 export default () => {
   const songs = []
+  const keyWords = [...KEY_WORDS]
+
+  const hotKeywords = []
+  while (hotKeywords.length < 6) hotKeywords.push(keyWords.splice(~~(Math.random() * keyWords.length), 1)[0])
 
   const state = {
     audio: null,
@@ -26,7 +32,8 @@ export default () => {
     songIndex: 0,
     songDuration: 0,
     songList: [],
-    showFooter: true
+    showFooter: true,
+    hotKeywords
   }
 
   const getters = generateGetters(Object.keys(state))

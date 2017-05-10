@@ -20,8 +20,7 @@
     "lint:fix": "npm run lint:es -- --fix",
     "lint:es": "eslint --ext .js,.vue --max-warnings 10 .",
     "pm2": "cross-env NODE_ENV=production PORT=5000 DEBUG=hi:* pm2 start build/bin/start.js --name=vue-music",
-    "deploy": "bash build/bash/deploy.sh",
-    "static": "bash build/bash/static.sh"
+    "deploy": "bash build/bash/deploy.sh"
   },
   "dependencies": {
     "axios": "^0.16.1",
@@ -36,12 +35,14 @@
     "koa-static": "^3.0.0",
     "lodash": "^4.17.4",
     "lru-cache": "^4.0.2",
+    "mkdirp": "^0.5.1",
     "music-api": "^0.2.8",
     "nib": "^1.1.2",
+    "path-to-regexp": "^1.7.0",
     "stylus-px2rem": "^1.0.11",
-    "vue": "^2.3.2",
+    "vue": "^2.3.3",
     "vue-router": "^2.5.3",
-    "vue-server-renderer": "^2.3.2",
+    "vue-server-renderer": "^2.3.3",
     "vuex": "^2.3.1"
   },
   "devDependencies": {
@@ -80,7 +81,7 @@
     "vconsole": "^2.5.2",
     "vue-loader": "^12.0.3",
     "vue-style-loader": "^3.0.1",
-    "vue-template-compiler": "^2.3.2",
+    "vue-template-compiler": "^2.3.3",
     "webpack": "^2.5.1",
     "webpack-dev-middleware": "^1.10.2",
     "webpack-hot-middleware": "^2.18.0",

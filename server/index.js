@@ -1,11 +1,14 @@
 import fs from 'fs'
+import path from 'path'
 
 import Koa from 'koa'
 import compress from 'koa-compress'
 import onerror from 'koa-onerror'
 import logger from 'koa-logger'
 import lruCache from 'lru-cache'
+import mkdirp from 'mkdirp'
 import pug from 'pug'
+import re from 'path-to-regexp'
 import _debug from 'debug'
 
 import router from './router'
@@ -13,7 +16,7 @@ import intercept from './intercept'
 
 import config, {globals, paths} from '../build/config'
 
-const {__DEV__, __PROD__} = globals
+const {__DEV__} = globals
 
 const debug = _debug('hi:server')
 
@@ -32,6 +35,7 @@ router(app)
 
 let renderer
 let readyPromise
+let mfs
 
 const koaVersion = require('koa/package.json').version
 const vueVersion = require('vue-server-renderer/package.json').version
@@ -41,10 +45,7 @@ const DEFAULT_HEADERS = {
   Server: `koa/${koaVersion}; vue-server-renderer/${vueVersion}`
 }
 
-const STATICS = {
-  '/': 'new',
-  '/all': 'all'
-}
+const STATIC_PATTERN = ['/', '/all']
 
 app.use(async (ctx, next) => {
   await readyPromise
@@ -56,24 +57,51 @@ app.use(async (ctx, next) => {
 
   const {url} = ctx
 
-  if (__PROD__) {
-    const html = STATICS[url.split('?')[0]] + '.html'
-    if (html && fs.existsSync(paths.dist(html))) {
-      ctx.url = '/' + html
-      await next()
+  ctx.set(DEFAULT_HEADERS)
+
+  let generateStatic, distPath
+
+  if (STATIC_PATTERN.find(pattern => re(pattern).exec(url))) {
+    const staticFile = url.split('?')[0].replace(/^\//, '') || 'home'
+    const staticPath = `static/${staticFile}.html`
+    distPath = paths.dist(staticPath)
+
+    if (mfs.existsSync(distPath)) {
+      if (__DEV__) {
+        ctx.body = mfs.createReadStream(distPath)
+      } else {
+        ctx.url = staticPath
+        await next()
+      }
       return
     }
-  }
 
-  ctx.set(DEFAULT_HEADERS)
+    generateStatic = true
+  }
 
   const start = Date.now()
 
   const context = {url, title: 'Vue Music'}
 
-  ctx.body = renderer.renderToStream(context)
+  let html = ''
+
+  const stream = ctx.body = renderer.renderToStream(context)
     .on('error', e => ctx.onerror(e))
-    .on('end', () => console.log(`whole request: ${Date.now() - start}ms`))
+    .on('end', () => {
+      if (html) {
+        try {
+          mkdirp.sync(path.dirname(distPath), {fs: mfs})
+          mfs.writeFileSync(distPath, html)
+        } catch (e) {
+          console.error(e)
+        }
+
+        debug(`static html file "${distPath}" is generated!`)
+      }
+      debug(`whole request: ${Date.now() - start}ms`)
+    })
+
+  generateStatic && stream.on('data', data => (html += data.toString()))
 })
 
 // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
@@ -90,10 +118,12 @@ const createRenderer = (bundle, options) => require('vue-server-renderer').creat
 })
 
 if (__DEV__) {
-  readyPromise = require('./dev-tools').default(app, (bundle, options) => {
-    renderer = createRenderer(bundle, options)
+  readyPromise = require('./dev-tools').default(app, (bundle, {clientManifest, fs}) => {
+    mfs = fs
+    renderer = createRenderer(bundle, {clientManifest})
   })
 } else {
+  mfs = fs
   renderer = createRenderer(require(paths.dist('vue-ssr-server-bundle.json')), {
     clientManifest: require(paths.dist('vue-ssr-client-manifest.json'))
   })
