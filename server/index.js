@@ -92,16 +92,15 @@ app.use(async (ctx, next) => {
         try {
           mkdirp.sync(path.dirname(distPath), {fs: mfs})
           mfs.writeFileSync(distPath, html)
+          debug(`static html file "${distPath}" is generated!`)
         } catch (e) {
           console.error(e)
         }
-
-        debug(`static html file "${distPath}" is generated!`)
       }
       debug(`whole request: ${Date.now() - start}ms`)
     })
 
-  generateStatic && stream.on('data', data => (html += data.toString()))
+  generateStatic && stream.on('data', data => (html += data))
 })
 
 // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
