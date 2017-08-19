@@ -82,6 +82,7 @@ if (minimize) {
   debug(`Enable plugins for ${NODE_ENV} (UglifyJS).`)
 
   clientConfig.plugins.push(
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       mangle: !sourceMap,
       compress: {
