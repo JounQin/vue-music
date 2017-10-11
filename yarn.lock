@@ -6349,9 +6349,9 @@ urijs@^1.16.1:
   version "1.18.12"
   resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.18.12.tgz#f04d91e1fabb29c16fc842f9a14ee8ddc3fda64e"
 
-url-loader@0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/url-loader/-/url-loader-0.6.1.tgz#4e8eee4232098610d74d64191f65836e0a1a06e0"
+url-loader@^0.6.1:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/url-loader/-/url-loader-0.6.2.tgz#a007a7109620e9d988d14bce677a1decb9a993f7"
   dependencies:
     loader-utils "^1.0.2"
     mime "^1.4.1"
@@ -6548,9 +6548,9 @@ vue@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.4.2.tgz#a9855261f191c978cc0dc1150531b8d08149b58c"
 
-vuex@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/vuex/-/vuex-2.3.1.tgz#cde8e997c1f9957719bc7dea154f9aa691d981a6"
+vuex@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.0.0.tgz#98b4b5c4954b1c1c1f5b29fa0476a23580315814"
 
 ware@^1.2.0:
   version "1.3.0"
