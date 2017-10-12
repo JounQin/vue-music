@@ -40,7 +40,7 @@
     "nib": "^1.1.2",
     "path-to-regexp": "^2.0.0",
     "vue": "^2.4.2",
-    "vue-router": "^2.7.0",
+    "vue-router": "^3.0.0",
     "vue-server-renderer": "^2.4.2",
     "vuex": "^2.3.1"
   },
