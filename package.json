@@ -23,7 +23,7 @@
     "deploy": "bash build/bash/deploy.sh"
   },
   "dependencies": {
-    "axios": "^0.16.2",
+    "axios": "^0.17.0",
     "bootstrap-styl": "^5.0.8",
     "encoding": "^0.1.12",
     "fonts.css": "^1.5.0",
