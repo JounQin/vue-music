@@ -74,7 +74,7 @@
     "url-loader": "^0.6.1",
     "vconsole": "^3.0.0",
     "vue-loader": "^13.0.4",
-    "vue-style-loader": "^3.0.1",
+    "vue-style-loader": "^4.0.0",
     "vue-template-compiler": "^2.4.2",
     "webpack": "^3.5.5",
     "webpack-dev-middleware": "^2.0.1",
