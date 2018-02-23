@@ -59,7 +59,7 @@
     "css-loader": "^0.28.5",
     "debug": "^3.0.1",
     "eslint": "^4.5.0",
-    "eslint-config-1stg": "^1.0.1",
+    "eslint-config-1stg": "^2.0.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.0",
     "img-loader": "^2.0.0",
