@@ -26,7 +26,7 @@
     "axios": "^0.18.0",
     "bootstrap-styl": "^5.0.8",
     "encoding": "^0.1.12",
-    "fonts.css": "^1.5.0",
+    "fonts.css": "^2.0.0",
     "koa": "^2.3.0",
     "koa-compress": "^2.0.0",
     "koa-logger": "^3.0.1",
