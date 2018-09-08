@@ -7,7 +7,8 @@ const chunks = modulesContext.keys().reduce((modules, key) => {
 
 const moduleNames = Object.keys(chunks)
 
-export default () => moduleNames.reduce((modules, moduleName) => {
-  modules[moduleName] = chunks[moduleName]()
-  return modules
-}, {})
+export default () =>
+  moduleNames.reduce((modules, moduleName) => {
+    modules[moduleName] = chunks[moduleName]()
+    return modules
+  }, {})

@@ -16,31 +16,31 @@
     div(:class="$style.noMore") 没有更多歌曲了~
 </template>
 <script>
-  import {mapGetters, mapActions} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
-  export default {
-    name: 'song-list',
-    async asyncData({store, route}) {
-      await store.dispatch('checkSongLit', +!!route.params.all)
-    },
-    async beforeRouteUpdate(to, from, next) {
-      await this.$options.asyncData({store: this.$store, route: to})
-      next()
-    },
-    beforeRouteLeave(to, from, next) {
-      this.togglePlay(false)
-      next()
-    },
-    beforeMount() {
-      this.$store.dispatch('cacheSongList', +!!this.$route.params.all)
-    },
-    computed: {
-      ...mapGetters(['songList', 'songIndex'])
-    },
-    methods: {
-      ...mapActions(['deleteSong', 'toggleSong', 'togglePlay'])
-    }
-  }
+export default {
+  name: 'SongList',
+  async asyncData({ store, route }) {
+    await store.dispatch('checkSongLit', +!!route.params.all)
+  },
+  async beforeRouteUpdate(to, from, next) {
+    await this.$options.asyncData({ store: this.$store, route: to })
+    next()
+  },
+  beforeRouteLeave(to, from, next) {
+    this.togglePlay(false)
+    next()
+  },
+  computed: {
+    ...mapGetters(['songList', 'songIndex']),
+  },
+  beforeMount() {
+    this.$store.dispatch('cacheSongList', +!!this.$route.params.all)
+  },
+  methods: {
+    ...mapActions(['deleteSong', 'toggleSong', 'togglePlay']),
+  },
+}
 </script>
 <style lang="stylus" module>
   .container

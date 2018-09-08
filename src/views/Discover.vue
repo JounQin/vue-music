@@ -27,55 +27,61 @@
           button.btn(@click="search(keyword)") {{ keyword }}
 </template>
 <script>
-  import {mapGetters, mapActions} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
-  export default {
-    name: 'discover',
-    data() {
-      return {
-        active: false,
-        keyword: null,
-        searched: false
-      }
-    },
-    computed: {
-      ...mapGetters(['showFooter', 'songList', 'songIndex', 'hotKeywords'])
-    },
-    beforeRouteLeave(to, from, next) {
-      this.searched = false
-      this.toggleFooter(true)
-      next()
-    },
-    methods: {
-      ...mapActions(['restSongList', 'toggleSong', 'toggleFooter', 'setSongSrc']),
-      async search(keyword) {
-        const key = this.keyword = keyword || this.keyword
-
-        if (!key) return
-
-        this.active = true
-
-        this.restSongList((await this.$http.get(`/search-keyword`, {params: {key}})).data)
-
-        this.searched = true
-        this.toggleFooter(false)
-      },
-      cancelSearch() {
-        this.searched = false
-        this.active = false
-      },
-      async getSongSrc(id, index) {
-        const song = this.songList[index]
-
-        if (!song.songSrc) {
-          this.setSongSrc(song.songSrc = (await this.$http.get('/get-song-src', {params: {id}})).data)
-        }
-
-        this.toggleSong({index, play: true})
-        this.toggleFooter(true)
-      }
+export default {
+  name: 'Discover',
+  data() {
+    return {
+      active: false,
+      keyword: null,
+      searched: false,
     }
-  }
+  },
+  computed: {
+    ...mapGetters(['showFooter', 'songList', 'songIndex', 'hotKeywords']),
+  },
+  beforeRouteLeave(to, from, next) {
+    this.searched = false
+    this.toggleFooter(true)
+    next()
+  },
+  methods: {
+    ...mapActions(['restSongList', 'toggleSong', 'toggleFooter', 'setSongSrc']),
+    async search(keyword) {
+      const key = (this.keyword = keyword || this.keyword)
+
+      if (!key) return
+
+      this.active = true
+
+      this.restSongList(
+        (await this.$http.get(`/search-keyword`, { params: { key } })).data,
+      )
+
+      this.searched = true
+      this.toggleFooter(false)
+    },
+    cancelSearch() {
+      this.searched = false
+      this.active = false
+    },
+    async getSongSrc(id, index) {
+      const song = this.songList[index]
+
+      if (!song.songSrc) {
+        this.setSongSrc(
+          (song.songSrc = (await this.$http.get('/get-song-src', {
+            params: { id },
+          })).data),
+        )
+      }
+
+      this.toggleSong({ index, play: true })
+      this.toggleFooter(true)
+    },
+  },
+}
 </script>
 <style lang="stylus" module>
   .searched

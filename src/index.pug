@@ -2,13 +2,18 @@ doctype html
 html(lang="zh-cmn-Hans-CN")
   head
     meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
     meta(name="viewport", content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no")
-    title {{ title }}
-    | {{{ renderResourceHints() }}}
-    | {{{ renderStyles() }}}
+    meta(name="theme-color", content="#f60")
+    title #{title}
+    link(rel="manifest", href="/manifest.json")
+    script.
+      (function () {
+        var docEl = document.documentElement
+        var clientWidth = docEl.clientWidth
+        docEl.style.fontSize = (clientWidth < 768 ? clientWidth : 375) / 375 * 16 + 'px'
+      })()
   body
-    //vue-ssr-outlet
-    | {{{ renderState() }}}
-    if polyfill
+    #app
+    if process.env.NODE_ENV === 'production'
       script(src="https://cdn.polyfill.io/v2/polyfill.min.js")
-    | {{{ renderScripts() }}}

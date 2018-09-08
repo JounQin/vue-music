@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 export default store => {
-  const {dispatch} = store
+  const { dispatch } = store
 
   const router = new VueRouter({
     mode: 'history',
@@ -12,13 +12,14 @@ export default store => {
       {
         name: 'songList',
         path: '/:all(all)?',
-        component: () => import('views/SongList')
-      }, {
+        component: () => import('views/SongList'),
+      },
+      {
         name: 'discover',
         path: '/discover',
-        component: () => import('views/Discover')
-      }
-    ]
+        component: () => import('views/Discover'),
+      },
+    ],
   })
 
   let first = true

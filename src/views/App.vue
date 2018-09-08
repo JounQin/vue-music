@@ -40,135 +40,175 @@
     @ended="playEnded")
 </template>
 <script>
-  import {mapGetters, mapActions} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
-  import {formatSeconds, toNum} from 'utils'
+import { formatSeconds, toNum } from 'utils'
 
-  import HiLoading from 'HiLoading'
-  import HiProgress from 'HiProgress'
+import HiLoading from 'components/HiLoading'
+import HiProgress from 'components/HiProgress'
 
-  export default {
-    name: 'app',
-    filters: {
-      formatSeconds
+export default {
+  name: 'App',
+  filters: {
+    formatSeconds,
+  },
+  components: {
+    HiLoading,
+    HiProgress,
+  },
+  computed: {
+    ...mapGetters([
+      'audio',
+      'playing',
+      'progress',
+      'singerName',
+      'songSrc',
+      'songName',
+      'albumImg',
+      'songIndex',
+      'songDuration',
+      'currentTime',
+      'showFooter',
+    ]),
+    activeIndex() {
+      return ['', 'all', 'discover'].indexOf(
+        this.$route.fullPath.match(/^\/(all|discover)?/)[1] || '',
+      )
     },
-    computed: {
-      ...mapGetters(['audio', 'playing', 'progress', 'singerName', 'songSrc',
-        'songName', 'albumImg', 'songIndex', 'songDuration', 'currentTime', 'showFooter']),
-      activeIndex() {
-        return ['', 'all', 'discover'].indexOf(this.$route.fullPath.match(/^\/(all|discover)?/)[1] || '')
-      }
+  },
+  created() {
+    this.toggleSong({ index: 0 })
+  },
+  mounted() {
+    this.initAudio(this.$refs.audio)
+  },
+  methods: {
+    ...mapActions([
+      'toggleTheme',
+      'initAudio',
+      'durationChange',
+      'timeUpdate',
+      'togglePlay',
+      'playEnded',
+      'toggleSong',
+    ]),
+    changeTime(e) {
+      const { target } = e
+      const offsetX = e.clientX - target.offsetLeft
+      this.timeUpdate(
+        (offsetX / toNum(getComputedStyle(target).width)) * this.songDuration,
+      )
     },
-    created() {
-      this.toggleSong({index: 0})
-    },
-    mounted() {
-      this.initAudio(this.$refs.audio)
-    },
-    methods: {
-      ...mapActions(['toggleTheme', 'initAudio', 'durationChange',
-        'timeUpdate', 'togglePlay', 'playEnded', 'toggleSong']),
-      changeTime(e) {
-        const {target} = e
-        const offsetX = e.clientX - target.offsetLeft
-        this.timeUpdate(offsetX / toNum(getComputedStyle(target).width) * this.songDuration)
-      }
-    },
-    components: {
-      HiLoading,
-      HiProgress
-    }
-  }
+  },
+}
 </script>
 <style lang="stylus" module>
-  .header, .menus
-    flex 1
-    display flex
-    padding 10px
-    align-items center
-    justify-content center
+.header, .menus {
+  flex: 1;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+}
 
-  .header > div
-    relative()
-    flex 1
+.header > div {
+  relative();
+  flex: 1;
 
-    span
-      absolute(right)
+  span {
+    absolute(right);
+  }
+}
 
-  .menus
-    relative()
+.menus {
+  relative();
 
-    ul
-      display flex
-      width 100%
-      margin-bottom 0
+  ul {
+    display: flex;
+    width: 100%;
+    margin-bottom: 0;
+  }
 
-    li
-      flex 1
-      text-align center
+  li {
+    flex: 1;
+    text-align: center;
+  }
+}
 
-  .border
-    absolute(left, bottom)
-    width (100 / 3) %
-    height 1px
-    background-color $back-light-color
-    transition left .3s
+.border {
+  absolute(left, bottom);
+  width: (100 / 3)%;
+  height: 1px;
+  background-color: $back-light-color;
+  transition: left 0.3s;
+}
 
-  .footer
-    flex 2
+.footer {
+  flex: 2;
 
-    > :global(.media .media-right)
-      padding-right 10px
+  > :global(.media .media-right) {
+    padding-right: 10px;
+  }
 
-    :global(.media-object)
-      size 70px
+  :global(.media-object) {
+    size: 70px;
+  }
+}
 
-  .progress
-    relative()
-    width 100%
-    height 5px
-    border-radius 5px
-    background-color alpha($back-light-color, .5)
+.progress {
+  relative();
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background-color: alpha($back-light-color, 0.5);
 
-    > div
-      absolute()
-      height 100%
-      border-top-left-radius 5px
-      border-bottom-left-radius 5px
-      background-color $theme-green-darker
-      pointer-events none
+  > div {
+    absolute();
+    height: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-color: $theme-green-darker;
+    pointer-events: none;
 
-      &:before
-        absolute(right)
-        content ''
-        height 100%
-        width 2px
-        transform translate3d(100%, 0, 0)
-        background-color $back-light-color
+    &:before {
+      absolute(right);
+      content: '';
+      height: 100%;
+      width: 2px;
+      transform: translate3d(100%, 0, 0);
+      background-color: $back-light-color;
+    }
+  }
+}
 
-  .play-action
-    relative()
-    borderRadius($reverse-color, 50px, 50px)
-    size 40px
-    outline 0
+.play-action {
+  relative();
+  borderRadius($reverse-color, 50px, 50px);
+  size: 40px;
+  outline: 0;
 
-    &:after
-      middleCenter(, scaleX(sqrt(3)))
-      content ''
-      border 8px solid transparent
-      border-left-color $reverse-color
-      border-right 0
+  &:after {
+    middleCenter(, scaleX(sqrt(3)));
+    content: '';
+    border: 8px solid transparent;
+    border-left-color: $reverse-color;
+    border-right: 0;
+  }
 
-    &.active:after
-      middleCenter()
-      content '| |'
-      border 0
-      line-height clearUnit($primary-size / $common-size)
+  &.active:after {
+    middleCenter();
+    content: '| |';
+    border: 0;
+    line-height: clearUnit(($primary-size / $common-size));
+  }
+}
 
-  .header, .menus, .footer
-    color $reverse-color
+.header, .menus, .footer {
+  color: $reverse-color;
+}
 
-  .content
-    relative()
-    flex 20
+.content {
+  relative();
+  flex: 20;
+}
 </style>

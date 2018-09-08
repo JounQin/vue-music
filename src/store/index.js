@@ -4,7 +4,8 @@ import createModules from './modules'
 
 Vue.use(Vuex)
 
-export default () => new Vuex.Store({
-  strict: __DEV__,
-  modules: createModules()
-})
+export default () =>
+  new Vuex.Store({
+    strict: __DEV__,
+    modules: createModules(),
+  })

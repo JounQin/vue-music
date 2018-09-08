@@ -1,4 +1,4 @@
-import {leftPad} from 'utils'
+import { leftPad } from 'utils'
 
 function darkenColor(col, amt) {
   let usePound = false
@@ -15,17 +15,20 @@ function darkenColor(col, amt) {
   if (r > 255) r = 255
   else if (r < 0) r = 0
 
-  let g = (num & 0x0000FF) + amt
+  let g = (num & 0x0000ff) + amt
 
   if (g > 255) g = 255
   else if (g < 0) g = 0
 
-  let b = ((num >> 8) & 0x00FF) + amt
+  let b = ((num >> 8) & 0x00ff) + amt
 
   if (b > 255) b = 255
   else if (b < 0) b = 0
 
-  return (usePound ? '#' : '') + leftPad((g | (b << 8) | (r << 16)).toString(16), 6, 0)
+  return (
+    (usePound ? '#' : '') +
+    leftPad((g | (b << 8) | (r << 16)).toString(16), 6, 0)
+  )
 }
 
 const cache = {}
@@ -35,13 +38,18 @@ const getStyle = async color => {
 
   const isCustom = color.startsWith('#')
 
-  const text = (await import(`styles/theme-${isCustom ? 'custom' : color}`)).toString()
+  const text = (await import(`styles/theme-${
+    isCustom ? 'custom' : color
+  }`)).toString()
 
   let result
 
   if (isCustom) {
     const darkerColor = darkenColor(color, 10)
-    result = text.replace(/\$theme-color(-darker)?/g, (match, $0) => $0 ? darkerColor : color)
+    result = text.replace(
+      /\$theme-color(-darker)?/g,
+      (match, $0) => ($0 ? darkerColor : color),
+    )
   } else {
     result = text
   }
@@ -49,13 +57,13 @@ const getStyle = async color => {
   return (cache[color] = result)
 }
 
-export default async ({context, theme}) => {
+export default async ({ context, theme }) => {
   const result = await getStyle(theme)
 
   if (__SERVER__) {
-    (context._styles || (context._styles = {}))[theme] = {
+    ;(context._styles || (context._styles = {}))[theme] = {
       ids: [theme],
-      css: result
+      css: result,
     }
     return
   }
