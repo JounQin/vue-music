@@ -17,13 +17,18 @@
     "sync:pull": "bash build/sync-pull.sh",
     "sync:push": "bash build/sync-push.sh",
     "lint": "eslint --ext .js,.vue --max-warnings 10 .",
-    "pm2": "cross-env NODE_ENV=production PORT=5000 DEBUG=hi:* pm2 start build/bin/start.js --name=vue-music"
+    "precommit": "lint-staged",
+    "pm2": "cross-env NODE_ENV=production PORT=5000 DEBUG=hi:* pm2 start build/bin/start.js --name=vue-music",
+    "prune": "yarn install --production --ignore-optional --ignore-scripts --prefer-offline --force"
   },
   "babel": {
     "presets": [
       "@babel/env"
     ]
   },
+  "browserslist": [
+    "> 1% in CN"
+  ],
   "eslintConfig": {
     "extends": "1stg/vue",
     "env": {
@@ -42,6 +47,16 @@
   "eslintIgnore": [
     "dist"
   ],
+  "lint-staged": {
+    "*.{json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{js,vue}": [
+      "eslint --max-warnings=10 --fix",
+      "git add"
+    ]
+  },
   "prettier": {
     "semi": false,
     "singleQuote": true,
@@ -93,8 +108,10 @@
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^0.14.3",
     "img-loader": "^3.0.0",
     "koa-webpack": "^5.1.0",
+    "lint-staged": "^7.2.2",
     "lodash-webpack-plugin": "^0.11.5",
     "mini-css-extract-plugin": "^0.4.2",
     "npm-run-all": "^4.1.3",

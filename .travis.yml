@@ -16,7 +16,7 @@ before_script: greenkeeper-lockfile-update
 script:
   - set -e
   - yarn lint
-  - PORT=5000 yarn build
+  - yarn build
   - 'if [[ $TRAVIS_BRANCH = "master" && "$TRAVIS_PULL_REQUEST" = "false" ]]; then yarn sync:push; fi'
 
 after_script: greenkeeper-lockfile-upload
