@@ -78,7 +78,7 @@
     "mkdirp": "^0.5.1",
     "music-api": "^0.3.11",
     "nib": "^1.1.2",
-    "path-to-regexp": "^2.4.0",
+    "path-to-regexp": "^3.0.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.0",
     "vue-server-renderer": "^2.5.17",
