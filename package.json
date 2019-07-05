@@ -90,7 +90,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "@babel/register": "^7.0.0",
+    "@babel/register": "^7.4.4",
     "@vue/babel-helper-vue-jsx-merge-props": "^0.1.0",
     "@vue/babel-plugin-transform-vue-jsx": "^0.1.0",
     "autoprefixer": "^9.1.5",
