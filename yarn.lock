@@ -3978,9 +3978,10 @@ koa-static@^5.0.0:
     debug "^3.1.0"
     koa-send "^5.0.0"
 
-koa-webpack@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/koa-webpack/-/koa-webpack-5.1.0.tgz#7b9f04ea85c43c4d7ad845d0de01f0ed495eb5c0"
+koa-webpack@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/koa-webpack/-/koa-webpack-5.1.1.tgz#2c2414f0fbf3dc1996d76191c3d20832f7afd95e"
+  integrity sha512-ezs3CNJZ3a/UN0LmEslTZmiro9Y+2bPJFpcYlDsZxOmWDaDmvBgZuCdG3jCl63EzKL/Pfd+AeaUARwLJ//Unwg==
   dependencies:
     "@webpack-contrib/schema-utils" "^1.0.0-beta.0"
     app-root-path "^2.0.1"
